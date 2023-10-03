@@ -1,0 +1,253 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* #region  /**=========== Primary Color =========== */
+  --tw-color-primary-50: 239, 246, 255;
+  --tw-color-primary-100: 219, 234, 254;
+  --tw-color-primary-200: 191, 219, 254;
+  --tw-color-primary-300: 147, 197, 253;
+  --tw-color-primary-400: 96, 165, 250;
+  --tw-color-primary-500: 59, 130, 246;
+  --tw-color-primary-600: 37, 99, 235;
+  --tw-color-primary-700: 29, 78, 216;
+  --tw-color-primary-800: 30, 64, 175;
+  --tw-color-primary-900: 30, 58, 138;
+  --color-primary-50: rgb(var(--tw-color-primary-50));
+  --color-primary-100: rgb(var(--tw-color-primary-100));
+  --color-primary-200: rgb(var(--tw-color-primary-200));
+  --color-primary-300: rgb(var(--tw-color-primary-300));
+  --color-primary-400: rgb(var(--tw-color-primary-400));
+  --color-primary-500: rgb(var(--tw-color-primary-500));
+  --color-primary-600: rgb(var(--tw-color-primary-600));
+  --color-primary-700: rgb(var(--tw-color-primary-700));
+  --color-primary-800: rgb(var(--tw-color-primary-800));
+  --color-primary-900: rgb(var(--tw-color-primary-900));
+  /* #endregion  /**======== Primary Color =========== */
+}
+
+.dashboard-layout {
+  @apply mx-auto w-full md:max-w-[95%];
+}
+
+.layout {
+  max-width: 78.75rem;
+  @apply mx-auto w-11/12;
+}
+
+.drop-shadow-glow {
+  filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.8))
+    drop-shadow(0 0 40px rgba(255, 69, 0, 0.8))
+    drop-shadow(0 0 60px rgba(255, 0, 0, 0.8));
+}
+
+/* #region  /**=========== Input =========== */
+input[type='search']::-webkit-search-decoration,
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-results-button,
+input[type='search']::-webkit-search-results-decoration,
+input[type='search'] {
+  -webkit-appearance: none;
+  background-color: transparent;
+  border-radius: 8px;
+}
+
+/* hiding web browser default styling on autocomplete */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* setting placeholder default color */
+input::placeholder {
+  color: #9a9a9a;
+}
+
+input::-webkit-input-placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #9a9a9a;
+  opacity: 1; /* Firefox */
+}
+
+input:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #9a9a9a;
+}
+
+input::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: #9a9a9a;
+}
+/* #region  /**=========== Input =========== */
+
+/* #region  /**=========== Select =========== */
+select {
+  background: url('/down.png') no-repeat right;
+  background-size: 8px;
+}
+/* #region  /**=========== Select =========== */
+
+/* #region  /**=========== Datepicker =========== */
+.react-datepicker-wrapper {
+  display: block;
+  width: 100%;
+}
+
+.react-datepicker__month-container {
+  width: fit-content;
+  min-width: 15.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.react-datepicker__navigation.react-datepicker__navigation--previous,
+.react-datepicker__navigation.react-datepicker__navigation--next {
+  top: 6px;
+}
+
+.react-datepicker__header {
+  @apply !bg-white !border-none space-y-2;
+}
+
+.react-datepicker__header__dropdown.react-datepicker__header__dropdown--select {
+  padding: 0 5px;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  justify-content: space-evenly;
+  column-gap: 8px;
+}
+
+.react-datepicker__header__dropdown {
+  margin-top: 0.5rem;
+}
+
+.react-datepicker {
+  @apply !bg-white p-3 !font-primary !border-none shadow-lg ring-1 ring-gray-100;
+}
+
+.react-datepicker__day {
+  @apply !text-base-black;
+}
+
+.react-datepicker__triangle::before {
+  @apply !border-none;
+}
+
+.react-datepicker__month-container {
+  @apply space-y-0;
+}
+
+.react-datepicker__navigation.react-datepicker__navigation--next,
+.react-datepicker__navigation.react-datepicker__navigation--previous {
+  @apply top-5;
+}
+
+.react-datepicker__day-names {
+  @apply font-semibold;
+}
+
+.react-datepicker__current-month,
+.react-datepicker__current-month--hasYearDropdown,
+.react-datepicker__current-month--hasMonthDropdown {
+  @apply !text-base-black;
+}
+
+.react-datepicker__year-dropdown-container.react-datepicker__year-dropdown-container--select {
+  @apply bg-[#f8f8fa] rounded flex justify-center shadow-sm w-fit ring-1 ring-gray-100 focus-within:outline focus-within:outline-blue-500 !mx-0 pl-[2px];
+}
+
+.react-datepicker__month-dropdown-container.react-datepicker__month-dropdown-container--select {
+  @apply bg-[#f8f8fa] rounded flex justify-center shadow-sm w-fit ring-1 ring-gray-100 focus-within:outline focus-within:outline-blue-500 !mx-0 pl-[2px];
+}
+
+.react-datepicker__year-select {
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  padding: 0.2rem 0.25rem 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  background-position: top 50% right 8px;
+  @apply appearance-none bg-[#f8f8fa] text-base-black font-medium focus:!outline-none pr-6;
+}
+
+.react-datepicker__month-select {
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  padding: 0.2rem 0rem 0.2rem 0.5rem;
+  border-radius: 0.25rem;
+  max-width: 6.5rem;
+  background-position: top 50% right 8px;
+  @apply appearance-none bg-[#f8f8fa] text-base-black font-medium focus:!outline-none pr-6;
+}
+
+.react-datepicker__day--today {
+  @apply bg-[#f8f8fa] !text-blue-600 !font-medium ring-1 ring-gray-100 !rounded;
+}
+
+.react-datepicker__day {
+  @apply hover:!bg-primary-100 !rounded-full;
+}
+
+/* date outside month */
+.react-datepicker__day--outside-month {
+  @apply !text-gray-400;
+}
+
+/* Selected date color */
+.react-datepicker__day--selected,
+.react-datepicker__day--in-selecting-range,
+.react-datepicker__day--in-range,
+.react-datepicker__month-text--selected,
+.react-datepicker__month-text--in-selecting-range,
+.react-datepicker__month-text--in-range,
+.react-datepicker__quarter-text--selected,
+.react-datepicker__quarter-text--in-selecting-range,
+.react-datepicker__quarter-text--in-range,
+.react-datepicker__year-text--selected,
+.react-datepicker__year-text--in-selecting-range,
+.react-datepicker__year-text--in-range,
+.react-datepicker__day--keyboard-selected,
+.react-datepicker__month-text--keyboard-selected,
+.react-datepicker__quarter-text--keyboard-selected,
+.react-datepicker__year-text--keyboard-selected {
+  @apply !bg-blue-600 hover:!bg-blue-600 !text-white !rounded-full;
+}
+/* #endregion  /**======== Datepicker =========== */
+
+/* #region  /**=========== DropzoneInput Border =========== */
+/** @see https://kovart.github.io/dashed-border-generator/ */
+.dropzone-border {
+  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='8' ry='8' stroke='%23D1D5DBFF' stroke-width='3' stroke-dasharray='7' stroke-dashoffset='20' stroke-linecap='square'/%3e%3c/svg%3e");
+  border-radius: 0.5rem;
+}
+.dropzone-border-error {
+  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='8' ry='8' stroke='%23EF4444FF' stroke-width='3' stroke-dasharray='7' stroke-dashoffset='20' stroke-linecap='square'/%3e%3c/svg%3e");
+  border-radius: 0.5rem;
+}
+.dropzone-border-ondrag {
+  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='8' ry='8' stroke='%232563EBFF' stroke-width='4' stroke-dasharray='7' stroke-dashoffset='20' stroke-linecap='square'/%3e%3c/svg%3e");
+}
+/* #endregion  /**======== DropzoneInput Border =========== */
+
+/* #endregion  /**======== Table Entries Select =========== */
+.entries-option {
+  background-position: top 50% right 2.5px;
+  @apply pr-4;
+}
+/* #endregion  /**======== Table Entries Select =========== */
+
+@layer base {
+  .resizer {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    cursor: col-resize;
+    user-select: none;
+    touch-action: none;
+  }
+}
