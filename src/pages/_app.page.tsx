@@ -12,7 +12,7 @@ import nProgress from 'nprogress';
 
 import Toast from '@/components/Toast';
 import api from '@/lib/axios';
-import { poppins } from '@/lib/font';
+import { inter } from '@/lib/font';
 
 Router.events.on('routeChangeStart', nProgress.start);
 Router.events.on('routeChangeError', nProgress.done);
@@ -34,7 +34,7 @@ const queryClient = new QueryClient({
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className={poppins.className}>
+      <div className={inter.className}>
         <Toast />
         <Component {...pageProps} />
       </div>

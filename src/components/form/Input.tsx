@@ -67,7 +67,7 @@ export default function Input({
           'relative',
           withLabel && 'mt-1',
           addon && 'flex shadow-sm rounded-lg',
-          'text-mid md:text-base',
+          'text-mid md:text-mid',
         )}
       >
         {addon && (
@@ -124,9 +124,9 @@ export default function Input({
             onClick={togglePassword}
             className={clsxm(
               'absolute top-1/2 right-0 -translate-y-1/2 mr-3',
-              'flex justify-center items-center rounded-lg w-6 h-6',
+              'flex justify-center items-center rounded-md w-6 h-6',
               'focus:outline-none focus:ring focus:ring-blue-600',
-              'text-base-icon hover:text-base-secondary text-xl',
+              'text-base-icon hover:text-base-secondary text-[1.175rem]',
             )}
           >
             {showPassword ? <HiEyeOff /> : <HiEye />}
