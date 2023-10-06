@@ -3,6 +3,7 @@ import * as React from 'react';
 import { FiMenu } from 'react-icons/fi';
 import { HiLightningBolt } from 'react-icons/hi';
 import { IoClose } from 'react-icons/io5';
+import { PiRocketBold } from 'react-icons/pi';
 
 import Button from '@/components/buttons/Button';
 import ButtonLink from '@/components/links/ButtonLink';
@@ -49,10 +50,9 @@ export default function Navbar({
             'bg-white bg-opacity-50 shadow-sm backdrop-blur transition-colors duration-150',
         )}
       >
-        <UnstyledLink href='/'>
-          <Typography variant='h2' className='text-lg'>
-            Logo
-          </Typography>
+        <UnstyledLink href='/' className='flex items-center gap-1.5'>
+          <PiRocketBold className='text-xl' />
+          <Typography variant='h3'>Workhub</Typography>
         </UnstyledLink>
 
         <Button icon={FiMenu} onClick={openSidebar} className='md:hidden' />
@@ -74,7 +74,7 @@ export default function Navbar({
               </Typography>
             </UnstyledLink>
           ))}
-          <ButtonLink href=''>Masuk</ButtonLink>
+          <ButtonLink href='/login'>Masuk</ButtonLink>
         </nav>
       </div>
       {/* mobile navbar */}
@@ -99,7 +99,7 @@ export default function Navbar({
                 {label}
               </UnstyledLink>
             ))}
-            <ButtonLink href=''>Masuk</ButtonLink>
+            <ButtonLink href='/login'>Masuk</ButtonLink>
           </div>
         </div>
 
