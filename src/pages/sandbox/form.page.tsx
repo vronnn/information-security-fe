@@ -206,7 +206,6 @@ export default function FormPage() {
               <DropzoneInput
                 id='photo'
                 label='Photo'
-                maxFiles={2}
                 validation={{ required: 'Photo must be filled' }}
                 accept={{ 'image/*': ['.png', '.jpg', '.jpeg'] }}
                 helperText='Please upload files with .png, .jpg, or .jpeg extension.'

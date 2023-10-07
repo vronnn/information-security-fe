@@ -1,9 +1,9 @@
 import 'react-image-lightbox-rotation/style.css';
 
 import * as React from 'react';
-import { FiTrash2 } from 'react-icons/fi';
+import { FiEye, FiTrash2 } from 'react-icons/fi';
 import { HiOutlineExternalLink } from 'react-icons/hi';
-import { TbPhotoCheck, TbPhotoShare, TbScanEye } from 'react-icons/tb';
+import { TbPhotoCheck, TbPhotoShare } from 'react-icons/tb';
 import Lightbox from 'react-image-lightbox-rotation';
 
 import Button from '@/components/buttons/Button';
@@ -53,7 +53,7 @@ export default function FilePreview({
               aria-hidden='true'
             />
           )}
-          <Typography className='ml-2 w-0 flex-1 truncate !text-mid md:!text-base text-base-black'>
+          <Typography className='ml-2 w-0 flex-1 truncate !text-mid text-base-black'>
             {file.name}
           </Typography>
         </div>
@@ -66,8 +66,8 @@ export default function FilePreview({
                 e.stopPropagation();
                 setIsOpen(true);
               }}
-              className='text-[1.375rem] text-base-secondary hover:text-base-tertiary hover:bg-transparent p-0 rounded-md'
-              icon={TbScanEye}
+              className='text-xl text-base-secondary hover:text-base-tertiary hover:bg-transparent p-0 rounded-md'
+              icon={FiEye}
             />
           ) : (
             <ButtonLink

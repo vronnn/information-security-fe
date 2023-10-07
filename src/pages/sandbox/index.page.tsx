@@ -57,6 +57,10 @@ const sandboxContent = [
     href: '/sandbox/text-button',
     label: 'Text Button & Link',
   },
+  {
+    href: '/sandbox/editor-dropzone',
+    label: 'Editor Dropzone',
+  },
 ];
 
 export default function Sandbox() {
