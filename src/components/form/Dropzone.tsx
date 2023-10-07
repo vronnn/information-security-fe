@@ -12,7 +12,6 @@ type DropzoneInputProps = {
   id: string;
   label: string | null;
   accept?: Accept;
-  maxFiles?: number;
   helperText?: string;
   readOnly?: boolean;
   hideError?: boolean;
@@ -23,7 +22,6 @@ export default function DropzoneInput({
   id,
   label,
   accept,
-  maxFiles = 1,
   helperText,
   readOnly = false,
   hideError = false,
@@ -40,77 +38,48 @@ export default function DropzoneInput({
   const error = get(errors, id);
   const withLabel = label !== null;
 
-  //#region  //*=========== error focus ===========
-  const dropzoneRef = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    error && dropzoneRef.current?.focus();
-  }, [error]);
-  //#endregion  //*======== error focus ===========
-
-  //#region  //*=========== sync files with RHF ===========
   const fileValue = getValues(id);
-  const [files, setFiles] = React.useState<FileWithPreview[]>(fileValue ?? []);
-
-  React.useEffect(() => {
-    setFiles(fileValue ?? []);
-  }, [fileValue]);
-  //#endregion  //*======== sync files with RHF ===========
+  const [file, setFile] = React.useState<FileWithPreview | null>(
+    fileValue ?? null,
+  );
 
   const onDrop = React.useCallback(
     <T extends File>(acceptedFiles: T[], rejectedFiles: FileRejection[]) => {
       if (rejectedFiles && rejectedFiles.length > 0) {
-        setValue(id, files ? [...files] : null);
+        setValue(id, null);
         setError(id, {
           type: 'manual',
           message: rejectedFiles && rejectedFiles[0].errors[0].message,
         });
       } else {
-        const acceptedFilesPreview = acceptedFiles.map((file: T) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          }),
-        );
+        const acceptedFile = acceptedFiles[0];
+        const acceptedFilePreview = Object.assign(acceptedFile, {
+          preview: URL.createObjectURL(acceptedFile),
+        });
 
-        setFiles(
-          files
-            ? [...files, ...acceptedFilesPreview].slice(0, maxFiles)
-            : acceptedFilesPreview,
-        );
+        setFile(acceptedFilePreview);
 
-        setValue(
-          id,
-          files
-            ? [...files, ...acceptedFiles].slice(0, maxFiles)
-            : acceptedFiles,
-          {
-            shouldValidate: true,
-          },
-        );
+        setValue(id, acceptedFilePreview, {
+          shouldValidate: true,
+        });
         clearErrors(id);
       }
     },
-    [files, id, setValue, maxFiles, setError, clearErrors],
+    [id, setValue, setError, clearErrors],
   );
 
   React.useEffect(() => {
     return () => {
-      () => {
-        files.forEach((file) => URL.revokeObjectURL(file.preview));
-      };
+      if (file && file.preview) {
+        URL.revokeObjectURL(file.preview);
+      }
     };
-  }, [files]);
+  }, [file]);
 
-  const deleteFile = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    file: FileWithPreview,
-  ) => {
+  const deleteFile = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
-    const newFiles = [...files];
-    newFiles.splice(newFiles.indexOf(file), 1);
-
-    setFiles(newFiles.length > 0 ? newFiles : []);
-    setValue(id, newFiles.length > 0 ? newFiles : null, {
+    setFile(null);
+    setValue(id, null, {
       shouldValidate: true,
       shouldDirty: true,
       shouldTouch: true,
@@ -121,7 +90,7 @@ export default function DropzoneInput({
     useDropzone({
       onDrop,
       accept,
-      maxFiles,
+      maxFiles: 1,
       maxSize: 1000000,
     });
 
@@ -138,7 +107,7 @@ export default function DropzoneInput({
         </Typography>
       )}
 
-      {readOnly && !files && (
+      {readOnly && !file && (
         <div
           className={clsxm(
             'flex items-center gap-2.5 w-full rounded-lg',
@@ -152,7 +121,7 @@ export default function DropzoneInput({
         </div>
       )}
 
-      {!readOnly && files.length < maxFiles && (
+      {!readOnly && !file && (
         <Controller
           name={id}
           control={control}
@@ -164,7 +133,6 @@ export default function DropzoneInput({
                 withLabel && 'mt-1',
               ])}
               {...getRootProps()}
-              ref={dropzoneRef}
             >
               <input {...field} value={undefined} {...getInputProps()} />
               <div className='pr-[.1px] w-full'>
@@ -195,9 +163,9 @@ export default function DropzoneInput({
                         Please drop the supported file extension only
                       </Typography>
                     )}
-                    <Typography variant='c0' className='mt-1'>{`${
-                      maxFiles - (files?.length || 0)
-                    } file(s) remaining`}</Typography>
+                    <Typography variant='c0' className='mt-1'>
+                      1 file(s) remaining
+                    </Typography>
                   </div>
                 </div>
               </div>
@@ -216,16 +184,13 @@ export default function DropzoneInput({
         />
       )}
 
-      {files.length > 0 && (
+      {file && (
         <ul className='mt-1 divide-y divide-gray-300 rounded-lg border border-gray-300'>
-          {files.map((file, index) => (
-            <FilePreview
-              key={index}
-              readOnly={readOnly}
-              file={file}
-              deleteFile={deleteFile}
-            />
-          ))}
+          <FilePreview
+            readOnly={readOnly}
+            file={file}
+            deleteFile={deleteFile}
+          />
         </ul>
       )}
     </div>
