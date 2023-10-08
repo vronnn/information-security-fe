@@ -249,6 +249,7 @@ export default function SearchableSelectInput({
               isDisabled={disabled}
               isClearable
               isMulti={isMulti}
+              menuPlacement='auto'
               closeMenuOnSelect={!isMulti}
               placeholder={placeholder}
               options={options}

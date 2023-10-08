@@ -7,6 +7,7 @@ import clsxm from '@/lib/clsxm';
 type TextAreaProps = {
   id: string;
   label: string | null;
+  rows?: number;
   placeholder?: string;
   validation?: RegisterOptions;
   helperText?: string;
@@ -18,6 +19,7 @@ type TextAreaProps = {
 export default function TextArea({
   id,
   label,
+  rows = 3,
   placeholder,
   validation,
   helperText,
@@ -46,13 +48,13 @@ export default function TextArea({
           {label}
         </Typography>
       )}
-      <div className='text-mid md:text-base'>
+      <div className='text-mid'>
         <textarea
           {...register(id, validation)}
           {...rest}
           name={id}
           id={id}
-          rows={3}
+          rows={rows}
           placeholder={placeholder}
           readOnly={readOnly}
           disabled={disabled}

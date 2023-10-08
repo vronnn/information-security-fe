@@ -6,7 +6,8 @@ import { AiOutlineVideoCamera } from 'react-icons/ai';
 import { CgSpinner } from 'react-icons/cg';
 import { FiTrash2 } from 'react-icons/fi';
 import { HiOutlineExternalLink, HiOutlinePaperClip } from 'react-icons/hi';
-import { TbPhotoCheck, TbScanEye } from 'react-icons/tb';
+import { HiOutlineViewfinderCircle } from 'react-icons/hi2';
+import { TbPhotoCheck } from 'react-icons/tb';
 import Lightbox from 'react-image-lightbox-rotation';
 import { pdfjs } from 'react-pdf';
 import { Document, Page } from 'react-pdf';
@@ -135,7 +136,7 @@ export default function FileDisplay({
                     setIsOpen(true);
                   }}
                   className='text-[1.375rem] text-base-secondary hover:text-base-tertiary focus:ring-0 hover:bg-transparent p-0 rounded-md'
-                  icon={TbScanEye}
+                  icon={HiOutlineViewfinderCircle}
                 />
               ) : (
                 <ButtonLink
