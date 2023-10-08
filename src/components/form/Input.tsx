@@ -78,7 +78,7 @@ export default function Input({
               'border border-gray-300 border-r-0',
             )}
           >
-            <Typography>{addon}</Typography>
+            <Typography variant='d'>{addon}</Typography>
           </div>
         )}
         {LeftIcon && (

@@ -26,7 +26,7 @@ export default function EditorDropzonePage() {
           <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
             <EditorDropzone
               id='file'
-              label='Foto KTP'
+              label={null}
               validation={{ required: 'Photo must be filled' }}
               accept={{
                 'image/*': ['.png', '.jpg', '.jpeg'],

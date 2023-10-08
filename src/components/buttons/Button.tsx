@@ -97,7 +97,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               'hover:bg-blue-700 hover:border-blue-700',
               'active:bg-blue-800 active:border-blue-800',
               'disabled:bg-blue-800 disabled:border-blue-800',
-              'focus-visible:outline-blue-800',
+              'focus-visible:outline-blue-200',
             ],
             variant === 'secondary' && [
               'bg-blue-100 text-blue-600',

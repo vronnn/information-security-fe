@@ -39,6 +39,7 @@ function generateString(length: number) {
 
 export default function EditorDropzone({
   id,
+  label,
   accept,
   helperText,
   readOnly = false,
@@ -56,6 +57,7 @@ export default function EditorDropzone({
     formState: { errors },
   } = useFormContext();
   const error = get(errors, id);
+  const withLabel = label !== null;
   const [loading, setLoading] = React.useState(false);
 
   async function mockEncryption(file: File) {
@@ -139,7 +141,24 @@ export default function EditorDropzone({
         <TabsTrigger value='preview'>Preview</TabsTrigger>
       </TabsList>
       <TabsContent value='editor'>
-        <div className='rounded-lg border border-gray-300 p-2'>
+        <div
+          className={clsxm(
+            'rounded-lg border border-gray-300 p-2 relative',
+            withLabel && 'pt-0',
+          )}
+        >
+          {withLabel && (
+            <div className='py-1'>
+              <Typography
+                as='label'
+                variant='s3'
+                className='text-base-black font-semibold'
+                htmlFor={id}
+              >
+                {label}
+              </Typography>
+            </div>
+          )}
           {readOnly && !file && (
             <div
               className={clsxm(
