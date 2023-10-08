@@ -24,6 +24,10 @@ const nextConfig = {
   eslint: {
     dirs: ['src'],
   },
+  webpack: (config) => {
+    config.resolve.alias.canvas = false;
+    return config;
+  },
   reactStrictMode: true,
   pageExtensions: ['page.tsx', 'api.ts'],
   swcMinify: true,

@@ -3,15 +3,23 @@ import 'react-image-lightbox-rotation/style.css';
 import Image from 'next/image';
 import * as React from 'react';
 import { AiOutlineVideoCamera } from 'react-icons/ai';
+import { CgSpinner } from 'react-icons/cg';
 import { FiTrash2 } from 'react-icons/fi';
 import { HiOutlineExternalLink, HiOutlinePaperClip } from 'react-icons/hi';
 import { TbPhotoCheck, TbScanEye } from 'react-icons/tb';
 import Lightbox from 'react-image-lightbox-rotation';
+import { pdfjs } from 'react-pdf';
+import { Document, Page } from 'react-pdf';
 
 import Button from '@/components/buttons/Button';
 import ButtonLink from '@/components/links/ButtonLink';
 import Typography from '@/components/typography/Typography';
 import { FileWithPreview } from '@/types/dropzone';
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.js',
+  import.meta.url,
+).toString();
 
 type FileDisplayProps = {
   file: FileWithPreview | null;
@@ -36,6 +44,7 @@ export default function FileDisplay({
 
   const isImageType = file ? file.type.startsWith('image/') : false;
   const isVideoType = file ? file.type.startsWith('video/') : false;
+  const isPdfType = file ? file.type === 'application/pdf' : false;
 
   return (
     <>
@@ -63,6 +72,32 @@ export default function FileDisplay({
                 controls
                 style={{ maxWidth: '100%', maxHeight: '200px' }}
               />
+            </div>
+          )}
+          {isPdfType && (
+            <div className='flex justify-center min-w-full w-fit py-4 rounded-lg'>
+              <Document
+                file={file.preview}
+                loading={
+                  <div
+                    className='grid place-items-center'
+                    style={{ height: '400px' }}
+                  >
+                    <div className='flex items-center gap-2 text-base-black'>
+                      <CgSpinner className='animate-spin' />{' '}
+                      <Typography variant='d'>Loading...</Typography>
+                    </div>
+                  </div>
+                }
+              >
+                <Page
+                  pageNumber={1}
+                  height={400}
+                  renderTextLayer={false}
+                  renderAnnotationLayer={false}
+                  className='border'
+                />
+              </Document>
             </div>
           )}
           <div className='flex min-h-[2.25rem] border rounded-lg items-center justify-between py-0 pl-3 pr-3 text-sm md:min-h-[2.5rem] z-50'>
@@ -99,7 +134,7 @@ export default function FileDisplay({
                     e.stopPropagation();
                     setIsOpen(true);
                   }}
-                  className='text-[1.375rem] text-base-secondary hover:text-base-tertiary hover:bg-transparent p-0 rounded-md'
+                  className='text-[1.375rem] text-base-secondary hover:text-base-tertiary focus:ring-0 hover:bg-transparent p-0 rounded-md'
                   icon={TbScanEye}
                 />
               ) : (
@@ -110,7 +145,7 @@ export default function FileDisplay({
                   size='icon'
                   variant='ghost'
                   icon={HiOutlineExternalLink}
-                  buttonClassName='hover:bg-transparent rounded-md'
+                  buttonClassName='hover:bg-transparent rounded-md focus:ring-0'
                   iconClassName='text-[1.35rem] text-base-secondary hover:text-base-tertiary p-0'
                 />
               )}
@@ -119,7 +154,7 @@ export default function FileDisplay({
                   size='icon'
                   variant='ghost'
                   onClick={handleDelete}
-                  className='text-[1.175rem] text-red-500 hover:text-red-700 focus:ring-red-500 hover:bg-transparent p-0 rounded-md'
+                  className='text-[1.175rem] text-red-500 hover:text-red-700 focus:ring-0 hover:bg-transparent p-0 rounded-md'
                   icon={FiTrash2}
                 />
               )}

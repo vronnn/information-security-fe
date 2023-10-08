@@ -1,14 +1,18 @@
+import dynamic from 'next/dynamic';
 import * as React from 'react';
 import { Accept, FileRejection, useDropzone } from 'react-dropzone';
 import { Controller, get, useFormContext } from 'react-hook-form';
 import { CgSpinner } from 'react-icons/cg';
 import { TbPhotoOff } from 'react-icons/tb';
 
-import FileDisplay from '@/components/form/FileDisplay';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/Tabs';
 import Typography from '@/components/typography/Typography';
 import clsxm from '@/lib/clsxm';
 import { FileWithPreview } from '@/types/dropzone';
+
+const FileDisplay = dynamic(() => import('@/components/form/FileDisplay'), {
+  ssr: false,
+});
 
 type EditorDropzoneInputProps = {
   id: string;
@@ -19,6 +23,7 @@ type EditorDropzoneInputProps = {
   readOnly?: boolean;
   hideError?: boolean;
   validation?: Record<string, unknown>;
+  className?: string;
 };
 const characters =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -40,6 +45,7 @@ export default function EditorDropzone({
   hideError = false,
   maxSize = 1000000,
   validation,
+  className,
 }: EditorDropzoneInputProps) {
   const {
     control,
@@ -127,7 +133,7 @@ export default function EditorDropzone({
     });
 
   return (
-    <Tabs defaultValue='editor' className='w-full max-w-md'>
+    <Tabs defaultValue='editor' className={clsxm('w-full', className)}>
       <TabsList>
         <TabsTrigger value='editor'>Write</TabsTrigger>
         <TabsTrigger value='preview'>Preview</TabsTrigger>
