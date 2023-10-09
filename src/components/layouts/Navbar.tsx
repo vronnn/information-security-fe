@@ -74,7 +74,7 @@ export default function Navbar({
               </Typography>
             </UnstyledLink>
           ))}
-          <ButtonLink href='/login'>Masuk</ButtonLink>
+          <ButtonLink href='/login'>Log in</ButtonLink>
         </nav>
       </div>
       {/* mobile navbar */}
@@ -99,7 +99,7 @@ export default function Navbar({
                 {label}
               </UnstyledLink>
             ))}
-            <ButtonLink href='/login'>Masuk</ButtonLink>
+            <ButtonLink href='/login'>Log in</ButtonLink>
           </div>
         </div>
 
