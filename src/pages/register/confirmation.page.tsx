@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { HiOutlineCheck } from 'react-icons/hi';
 import { PiRocketBold } from 'react-icons/pi';
 
 import Button from '@/components/buttons/Button';
@@ -37,27 +38,21 @@ export default function ConfirmationPage() {
           <div className='static sm:absolute sm:w-40 sm:-top-10 sm:left-1/2 sm:-translate-x-1/2 text-center text-sm md:text-mid font-semibold order-2 text-gray-400'>
             Private Data
           </div>
-          <div className='w-6 h-6 flex items-center justify-center text-xs rounded-full p-1 bg-blue-500 text-white ring-8 ring-blue-100 shrink-0'>
-            1
-          </div>
+          <HiOutlineCheck className='w-6 h-6 flex items-center justify-center text-xs rounded-full p-1 bg-blue-500 text-white ring-8 ring-blue-100 shrink-0' />
         </div>
         <div className='w-0.5 h-6 sm:w-0 sm:h-0.5 ml-[11px] sm:ml-0 sm:grow bg-blue-100'></div>
         <div className='relative flex items-center gap-4 sm:block w-full sm:w-fit'>
           <div className='static sm:absolute sm:w-40 sm:-top-10 sm:left-1/2 sm:-translate-x-1/2 text-center text-sm md:text-mid font-semibold order-2 text-gray-400'>
             Activation
           </div>
-          <div className='w-6 h-6 flex items-center justify-center text-xs rounded-full p-1 bg-blue-500 text-white ring-8 ring-blue-100 shrink-0'>
-            2
-          </div>
+          <HiOutlineCheck className='w-6 h-6 flex items-center justify-center text-xs rounded-full p-1 bg-blue-500 text-white ring-8 ring-blue-100 shrink-0' />
         </div>
         <div className='w-0.5 h-6 sm:w-0 sm:h-0.5 ml-[11px] sm:ml-0 sm:grow bg-blue-100'></div>
         <div className='relative flex items-center gap-4 sm:block w-full sm:w-fit'>
           <div className='static sm:absolute sm:w-40 sm:-top-10 sm:left-1/2 sm:-translate-x-1/2 text-center text-sm md:text-mid font-semibold order-2 text-gray-400'>
             Documents
           </div>
-          <div className='w-6 h-6 flex items-center justify-center text-xs rounded-full p-1 bg-blue-500 text-white ring-8 ring-blue-100 shrink-0'>
-            3
-          </div>
+          <HiOutlineCheck className='w-6 h-6 flex items-center justify-center text-xs rounded-full p-1 bg-blue-500 text-white ring-8 ring-blue-100 shrink-0' />
         </div>
         <div className='w-0.5 h-6 sm:w-0 sm:h-0.5 ml-[11px] sm:ml-0 sm:grow bg-blue-100'></div>
         <div className='relative flex items-center gap-4 sm:block w-full sm:w-fit'>

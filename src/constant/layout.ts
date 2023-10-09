@@ -8,16 +8,12 @@ export const NavbarItem = [
     href: '/',
   },
   {
-    label: 'Sandbox',
-    href: '/sandbox',
-  },
-  {
     label: 'Dashboard',
     href: '/dashboard',
   },
   {
-    label: '404',
-    href: '/404',
+    label: 'About',
+    href: '/about',
   },
 ];
 
