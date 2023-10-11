@@ -1,3 +1,5 @@
+import { useMutation } from '@tanstack/react-query';
+import { AxiosError, AxiosResponse } from 'axios';
 import dynamic from 'next/dynamic';
 import * as React from 'react';
 import { Accept, FileRejection, useDropzone } from 'react-dropzone';
@@ -7,7 +9,9 @@ import { TbPhotoOff } from 'react-icons/tb';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/Tabs';
 import Typography from '@/components/typography/Typography';
+import api from '@/lib/axios';
 import clsxm from '@/lib/clsxm';
+import { ApiError, ApiReturn } from '@/types/api';
 import { FileWithPreview } from '@/types/dropzone';
 
 const FileDisplay = dynamic(() => import('@/components/form/FileDisplay'), {
@@ -25,17 +29,24 @@ type EditorDropzoneInputProps = {
   validation?: Record<string, unknown>;
   className?: string;
 };
-const characters =
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-function generateString(length: number) {
-  let result = '';
-  const charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
+type onDropFileResponse = {
+  path: string;
+  file_name: string;
+  file_type: 'video' | 'image' | 'file';
+  encryption: string;
+  aws_key: string;
+  aes_plain_text: string;
+  aes_block_cipher: string;
+  aes_gcm: string;
+  aes_nonce: string;
+  aes_result: string;
+};
+
+type onDropFileRequirement = {
+  file: File;
+  file_type: 'video' | 'image' | 'file';
+};
 
 export default function EditorDropzone({
   id,
@@ -58,20 +69,30 @@ export default function EditorDropzone({
   } = useFormContext();
   const error = get(errors, id);
   const withLabel = label !== null;
-  const [loading, setLoading] = React.useState(false);
+  // const [encryptFileIsLoading, setEncryptFileIsLoading] = React.useState(false);
 
-  async function mockEncryption(file: File) {
-    setLoading(true);
-    setContent('Uploading file...');
+  // const encryptFile = React.useCallback(
+  //   async ({ file, file_type }: { file: File; file_type: string }) => {
+  //     setEncryptFileIsLoading(true);
+  //     setContent('Uploading file...');
+  //     setTimeout(() => {
+  //       console.log(file, file_type);
+  //       setEncryptFileIsLoading(false);
+  //       setContent(file.name);
+  //     }, 2000);
+  //   },
+  //   [],
+  // );
 
-    return new Promise<File>((resolve) => {
-      setTimeout(() => {
-        resolve(file);
-        setContent(generateString(40));
-        setLoading(false);
-      }, 3000);
-    });
-  }
+  const {
+    mutateAsync: encryptFile,
+    isLoading: encryptFileIsLoading,
+    data: encryptedData,
+  } = useMutation<
+    AxiosResponse<ApiReturn<onDropFileResponse>>,
+    AxiosError<ApiError>,
+    onDropFileRequirement
+  >((data) => api.post('/api/file', data));
 
   const fileValue = getValues(id);
   const [file, setFile] = React.useState<FileWithPreview | null>(
@@ -95,8 +116,17 @@ export default function EditorDropzone({
         const acceptedFilePreview = Object.assign(acceptedFile, {
           preview: URL.createObjectURL(acceptedFile),
         });
-
-        await mockEncryption(acceptedFile);
+        setContent('Uploading file...');
+        await encryptFile({
+          file: acceptedFile,
+          file_type: acceptedFile.type.startsWith('video/')
+            ? 'video'
+            : acceptedFile.type.startsWith('image/')
+            ? 'image'
+            : 'file',
+        }).then((res) => {
+          setContent(res.data.data.aes_gcm);
+        });
         setFile(acceptedFilePreview);
         setValue(id, acceptedFilePreview, {
           shouldValidate: true,
@@ -104,7 +134,7 @@ export default function EditorDropzone({
         clearErrors(id);
       }
     },
-    [id, setValue, setError, clearErrors],
+    [id, setValue, setError, clearErrors, encryptFile],
   );
 
   React.useEffect(() => {
@@ -211,7 +241,9 @@ export default function EditorDropzone({
                   </div>
 
                   <div className='pt-1 flex items-center gap-1'>
-                    {loading && <CgSpinner className='animate-spin mt-1' />}
+                    {encryptFileIsLoading && (
+                      <CgSpinner className='animate-spin mt-1' />
+                    )}
                     {isDragReject ? (
                       <Typography variant='c0' className='text-red-500 mt-1'>
                         Please drop the supported file extension only
@@ -222,7 +254,9 @@ export default function EditorDropzone({
                           variant='c0'
                           className='mt-1 text-base-secondary'
                         >
-                          {loading ? 'Wait for file encryption...' : helperText}
+                          {encryptFileIsLoading
+                            ? 'Wait for file encryption...'
+                            : helperText}
                         </Typography>
                       )
                     )}
@@ -239,7 +273,16 @@ export default function EditorDropzone({
         </div>
       </TabsContent>
       <TabsContent value='preview'>
-        <FileDisplay readOnly={readOnly} file={file} deleteFile={deleteFile} />
+        {encryptedData ? (
+          <FileDisplay
+            readOnly={readOnly}
+            deleteFile={deleteFile}
+            encryption={encryptedData.data.data.encryption}
+            file_type={encryptedData.data.data.file_type}
+          />
+        ) : (
+          <div className='min-h-[13.85rem]'></div>
+        )}
       </TabsContent>
     </Tabs>
   );
