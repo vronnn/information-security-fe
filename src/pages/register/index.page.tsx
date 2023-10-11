@@ -1,3 +1,4 @@
+import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -9,22 +10,34 @@ import Input from '@/components/form/Input';
 import UnstyledLink from '@/components/links/UnstyledLink';
 import Typography from '@/components/typography/Typography';
 import { REGEX } from '@/constant/regex';
+import useMutationToast from '@/hooks/useMutationToast';
+import api from '@/lib/axios';
 
 type registerAccForm = {
   name: string;
   email: string;
   password: string;
-  confirm_password: string;
+};
+
+type registerAccResponse = {
+  id: string;
+  name: string;
+  telp_number: string;
+  role: 'user' | 'admin';
+  email: string;
+  is_verified: boolean;
 };
 
 export default function RegisterPage() {
   const router = useRouter();
   const methods = useForm<registerAccForm>();
   const { handleSubmit } = methods;
+  const { mutateAsync: register, isLoading: registerIsLoading } =
+    useMutationToast<registerAccResponse, registerAccForm>(
+      useMutation((data) => api.post('/api/user', data)),
+    );
   const onSubmit = (data: registerAccForm) => {
-    // eslint-disable-next-line no-console
-    console.log(data);
-    router.push('/register/activate');
+    register(data).then(() => router.push('/register/activate'));
   };
   return (
     <main className='min-h-screen pt-10 sm:pt-20'>
@@ -151,7 +164,9 @@ export default function RegisterPage() {
                 </UnstyledLink>
                 <div className='flex items-center gap-2.5'>
                   {/* <Button variant='outline'>Resend verification</Button> */}
-                  <Button type='submit'>Next Step</Button>
+                  <Button type='submit' isLoading={registerIsLoading}>
+                    Next Step
+                  </Button>
                 </div>
               </div>
             </form>
