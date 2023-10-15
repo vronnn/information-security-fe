@@ -21,6 +21,7 @@ type VideoFetchProps = {
     file: FileWithPreview,
   ) => void;
   withOption?: boolean;
+  mode: string;
 } & React.ComponentPropsWithoutRef<'div'>;
 
 const VideoFetch = ({
@@ -30,6 +31,7 @@ const VideoFetch = ({
   withOption = true,
   deleteFile,
   file,
+  mode,
   ...props
 }: VideoFetchProps) => {
   const [vidSrc, setVideoSrc] = React.useState<string>();
@@ -49,12 +51,12 @@ const VideoFetch = ({
     if (vidPath) {
       const getFileUrl = buildGetFileUrl({
         base_url: '/api/file/get',
-        mode: 'aes',
+        mode: mode,
         filename: vidPath,
       });
       getVideoURL({ url: getFileUrl });
     }
-  }, [getVideoURL, vidPath]);
+  }, [getVideoURL, vidPath, mode]);
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();

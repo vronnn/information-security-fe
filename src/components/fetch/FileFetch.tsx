@@ -24,6 +24,7 @@ type FileFetchProps = {
     file: FileWithPreview,
   ) => void;
   withOption?: boolean;
+  mode: string;
 } & React.ComponentPropsWithoutRef<'div'>;
 
 const FileFetch = ({
@@ -32,6 +33,7 @@ const FileFetch = ({
   withOption = true,
   deleteFile,
   file,
+  mode,
   ...props
 }: FileFetchProps) => {
   const [fileSrc, setFileSrc] = React.useState<string>();
@@ -51,12 +53,12 @@ const FileFetch = ({
     if (filePath) {
       const getFileUrl = buildGetFileUrl({
         base_url: '/api/file/get',
-        mode: 'aes',
+        mode: mode,
         filename: filePath,
       });
       getFileURL({ url: getFileUrl });
     }
-  }, [getFileURL, filePath]);
+  }, [getFileURL, filePath, mode]);
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
@@ -83,7 +85,7 @@ const FileFetch = ({
                 >
                   <div className='flex items-center gap-2 text-base-black'>
                     <CgSpinner className='animate-spin' />{' '}
-                    <Typography variant='d'>Loading...</Typography>
+                    <Typography variant='d'>Decrypting...</Typography>
                   </div>
                 </div>
               }

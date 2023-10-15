@@ -16,6 +16,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 type FileDisplayProps = {
   file: FileWithPreview;
   file_name: string;
+  mode: string;
   deleteFile?: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     file: FileWithPreview,
@@ -28,40 +29,46 @@ type FileDisplayProps = {
 export default function FileDisplay({
   file,
   file_name,
+  mode,
   encryption,
   file_type,
   deleteFile,
 }: FileDisplayProps): React.ReactElement {
   return (
     <>
-      <div className='space-y-2 min-h-[10rem]' key={encryption}>
-        {file_type === 'image' && (
-          <ImageFetch
-            imgPath={encryption}
-            alt='ID card'
-            className='border'
-            file={file}
-            file_name={file_name}
-            deleteFile={deleteFile}
-          />
-        )}
-        {file_type === 'video' && (
-          <VideoFetch
-            vidPath={encryption}
-            file={file}
-            deleteFile={deleteFile}
-            file_name={file_name}
-          />
-        )}
-        {file_type === 'file' && (
-          <FileFetch
-            filePath={encryption}
-            deleteFile={deleteFile}
-            file={file}
-            file_name={file_name}
-          />
-        )}
-      </div>
+      {encryption && (
+        <div className='space-y-2 min-h-[10rem]' key={encryption}>
+          {file_type === 'image' && (
+            <ImageFetch
+              imgPath={encryption}
+              alt='ID card'
+              className='border'
+              file={file}
+              file_name={file_name}
+              deleteFile={deleteFile}
+              mode={mode}
+            />
+          )}
+          {file_type === 'video' && (
+            <VideoFetch
+              vidPath={encryption}
+              file={file}
+              deleteFile={deleteFile}
+              file_name={file_name}
+              mode={mode}
+            />
+          )}
+          {file_type === 'file' && (
+            <FileFetch
+              filePath={encryption}
+              deleteFile={deleteFile}
+              file={file}
+              file_name={file_name}
+              mode={mode}
+            />
+          )}
+        </div>
+      )}
     </>
   );
 }

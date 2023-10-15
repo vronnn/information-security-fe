@@ -28,6 +28,7 @@ type ImageFetchProps = {
     file: FileWithPreview,
   ) => void;
   withLabel?: boolean;
+  mode: string;
 } & React.ComponentPropsWithoutRef<'div'>;
 
 const ImageFetch = ({
@@ -39,6 +40,7 @@ const ImageFetch = ({
   file_name,
   deleteFile,
   withLabel = true,
+  mode,
   ...props
 }: ImageFetchProps) => {
   const [imgSrc, setImgSrc] = React.useState<string>();
@@ -71,12 +73,12 @@ const ImageFetch = ({
     if (imgPath) {
       const getFileUrl = buildGetFileUrl({
         base_url: '/api/file/get',
-        mode: 'aes',
+        mode: mode,
         filename: imgPath,
       });
       getImageURL({ url: getFileUrl });
     }
-  }, [getImageURL, imgPath]);
+  }, [getImageURL, imgPath, mode]);
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
@@ -86,7 +88,7 @@ const ImageFetch = ({
   return (
     <>
       <div {...props} className='relative'>
-        {imgSrc && (
+        {imgSrc ? (
           <div
             className={clsxm(
               'flex justify-center py-4 rounded-lg max-h-[16.65rem]',
@@ -104,6 +106,8 @@ const ImageFetch = ({
               className={imgClassName}
             />
           </div>
+        ) : (
+          <div className='h-[18.9rem] md:h-[19.15rem]'></div>
         )}
         {isOpen && (
           <Lightbox

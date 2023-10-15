@@ -9,6 +9,7 @@ import { CgSpinner } from 'react-icons/cg';
 import { TbPhotoOff } from 'react-icons/tb';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/Tabs';
+import { ToggleGroup, ToggleGroupItem } from '@/components/toggles/ToggleGroup';
 import Typography from '@/components/typography/Typography';
 import api from '@/lib/axios';
 import clsxm from '@/lib/clsxm';
@@ -30,7 +31,7 @@ type EditorDropzoneInputProps = {
   hideError?: boolean;
   validation?: Record<string, unknown>;
   className?: string;
-  defaultTab?: 'editor' | 'preview';
+  defaultTab?: string;
   rows?: number;
 };
 
@@ -77,6 +78,8 @@ export default function EditorDropzone({
   } = useFormContext();
   const error = get(errors, id);
   const withLabel = label !== null;
+  const [mode, setMode] = React.useState('aes');
+  const [tab, setTab] = React.useState(defaultTab);
   // const [encryptFileIsLoading, setEncryptFileIsLoading] = React.useState(false);
 
   // const encryptFile = React.useCallback(
@@ -94,7 +97,7 @@ export default function EditorDropzone({
 
   const url = buildPostFileUrl({
     base_url: '/api/file',
-    mode: 'aes',
+    mode: mode,
   });
 
   const {
@@ -112,6 +115,23 @@ export default function EditorDropzone({
         'Content-Type': 'multipart/form-data',
       },
     }),
+  );
+
+  const encrypt = React.useCallback(
+    async ({ file, file_type }: onDropFileRequirement) => {
+      setContent('Encrypting file ...');
+      encryptFile({ file, file_type }).then((res) => {
+        setContent(
+          res.data.data.aes_gcm
+            ? res.data.data.aes_gcm
+            : res.data.data.aes_ciphertext
+            ? res.data.data.aes_ciphertext
+            : res.data.data.aes_result,
+        );
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [url, encryptFile],
   );
 
   const fileValue = getValues(id);
@@ -136,32 +156,6 @@ export default function EditorDropzone({
         const acceptedFilePreview = Object.assign(acceptedFile, {
           preview: URL.createObjectURL(acceptedFile),
         });
-        setContent('Uploading file...');
-        // console.log({
-        //   file: acceptedFilePreview,
-        //   file_type: acceptedFile.type.startsWith('video/')
-        //     ? 'video'
-        //     : acceptedFile.type.startsWith('image/')
-        //     ? 'image'
-        //     : 'file',
-        // });
-
-        await encryptFile({
-          file: acceptedFilePreview,
-          file_type: acceptedFile.type.startsWith('video/')
-            ? 'video'
-            : acceptedFile.type.startsWith('image/')
-            ? 'image'
-            : 'file',
-        }).then((res) => {
-          setContent(
-            res.data.data.aes_gcm
-              ? res.data.data.aes_gcm
-              : res.data.data.aes_ciphertext
-              ? res.data.data.aes_ciphertext
-              : res.data.data.aes_result,
-          );
-        });
         setFile(acceptedFilePreview);
         setValue(id, acceptedFilePreview, {
           shouldValidate: true,
@@ -169,8 +163,21 @@ export default function EditorDropzone({
         clearErrors(id);
       }
     },
-    [id, setValue, setError, clearErrors, encryptFile],
+    [id, setValue, setError, clearErrors],
   );
+
+  React.useEffect(() => {
+    if (file) {
+      encrypt({
+        file,
+        file_type: file.type.startsWith('video/')
+          ? 'video'
+          : file.type.startsWith('image/')
+          ? 'image'
+          : 'file',
+      });
+    }
+  }, [mode, url, encrypt, file]);
 
   React.useEffect(() => {
     return () => {
@@ -202,11 +209,47 @@ export default function EditorDropzone({
     });
 
   return (
-    <Tabs defaultValue={defaultTab} className={clsxm('w-full', className)}>
-      <TabsList>
-        <TabsTrigger value='editor'>Write</TabsTrigger>
-        <TabsTrigger value='preview'>Preview</TabsTrigger>
-      </TabsList>
+    <Tabs
+      defaultValue={defaultTab}
+      onValueChange={(value) => {
+        setTab(value);
+      }}
+      className={clsxm('w-full', className)}
+    >
+      <div className='flex items-center justify-between'>
+        <TabsList>
+          <TabsTrigger value='editor'>Write</TabsTrigger>
+          <TabsTrigger value='preview'>Preview</TabsTrigger>
+        </TabsList>
+        {tab === 'editor' && (
+          <ToggleGroup
+            type='single'
+            rovingFocus={true}
+            defaultValue='aes'
+            value={mode}
+            onValueChange={(value) => {
+              if (value) setMode(value);
+            }}
+          >
+            <ToggleGroupItem value='aes'>
+              <Typography variant='s3' className='uppercase'>
+                aes
+              </Typography>
+            </ToggleGroupItem>
+            <ToggleGroupItem value='des'>
+              <Typography variant='s3' className='uppercase'>
+                des
+              </Typography>
+            </ToggleGroupItem>
+            <ToggleGroupItem value='rc4'>
+              <Typography variant='s3' className='uppercase'>
+                rc4
+              </Typography>
+            </ToggleGroupItem>
+          </ToggleGroup>
+        )}
+      </div>
+
       <TabsContent value='editor'>
         <div
           className={clsxm(
@@ -326,6 +369,7 @@ export default function EditorDropzone({
             deleteFile={deleteFile}
             encryption={encryptedData.data.data.encryption}
             file_type={encryptedData.data.data.file_type}
+            mode={mode}
           />
         ) : (
           <div className='min-h-[16.65rem] rounded-lg border border-gray-300 p-2 grid place-items-center'>
