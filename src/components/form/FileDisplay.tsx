@@ -14,6 +14,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
 ).toString();
 
 type FileDisplayProps = {
+  file: FileWithPreview;
+  file_name: string;
   deleteFile?: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     file: FileWithPreview,
@@ -24,85 +26,42 @@ type FileDisplayProps = {
 };
 
 export default function FileDisplay({
+  file,
+  file_name,
   encryption,
   file_type,
+  deleteFile,
 }: FileDisplayProps): React.ReactElement {
   return (
     <>
       <div className='space-y-2 min-h-[10rem]' key={encryption}>
         {file_type === 'image' && (
-          <ImageFetch imgPath={encryption} alt='ID card' />
+          <ImageFetch
+            imgPath={encryption}
+            alt='ID card'
+            className='border'
+            file={file}
+            file_name={file_name}
+            deleteFile={deleteFile}
+          />
         )}
-        {file_type === 'video' && <VideoFetch vidPath={encryption} />}
-        {file_type === 'file' && <FileFetch filePath={encryption} />}
-        {/* <div className='flex min-h-[2.25rem] border rounded-lg items-center justify-between py-0 pl-3 pr-3 text-sm md:min-h-[2.5rem] z-50'>
-            <div className='flex w-0 flex-1 items-center'>
-              {isImageType ? (
-                <TbPhotoCheck
-                  className='h-5 w-5 flex-shrink-0 text-base-secondary'
-                  aria-hidden='true'
-                />
-              ) : isVideoType ? (
-                <AiOutlineVideoCamera
-                  className='h-5 w-5 flex-shrink-0 text-base-secondary'
-                  aria-hidden='true'
-                />
-              ) : (
-                <HiOutlinePaperClip
-                  className='h-5 w-5 flex-shrink-0 text-base-secondary'
-                  aria-hidden='true'
-                />
-              )}
-              <Typography
-                variant='d'
-                className='ml-2 w-0 flex-1 truncate text-base-black'
-              >
-                {file.name}
-              </Typography>
-            </div>
-            <div className='ml-4 flex flex-shrink-0 items-center gap-1.5'>
-              {isImageType ? (
-                <Button
-                  size='icon'
-                  variant='ghost'
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsOpen(true);
-                  }}
-                  className='text-[1.375rem] text-base-secondary hover:text-base-tertiary focus:ring-0 hover:bg-transparent p-0 rounded-md'
-                  icon={HiOutlineViewfinderCircle}
-                />
-              ) : (
-                <ButtonLink
-                  href={file.preview}
-                  openNewTab
-                  target='_blank'
-                  size='icon'
-                  variant='ghost'
-                  icon={HiOutlineExternalLink}
-                  buttonClassName='hover:bg-transparent rounded-md focus:ring-0'
-                  iconClassName='text-[1.35rem] text-base-secondary hover:text-base-tertiary p-0'
-                />
-              )}
-              {!readOnly && (
-                <Button
-                  size='icon'
-                  variant='ghost'
-                  onClick={handleDelete}
-                  className='text-[1.175rem] text-red-500 hover:text-red-700 focus:ring-0 hover:bg-transparent p-0 rounded-md'
-                  icon={FiTrash2}
-                />
-              )}
-            </div>
-          </div> */}
+        {file_type === 'video' && (
+          <VideoFetch
+            vidPath={encryption}
+            file={file}
+            deleteFile={deleteFile}
+            file_name={file_name}
+          />
+        )}
+        {file_type === 'file' && (
+          <FileFetch
+            filePath={encryption}
+            deleteFile={deleteFile}
+            file={file}
+            file_name={file_name}
+          />
+        )}
       </div>
-      {/* {file && isOpen && (
-        <Lightbox
-          mainSrc={file.preview}
-          rotate={0}
-          onCloseRequest={() => setIsOpen(false)}
-        />
-      )} */}
     </>
   );
 }

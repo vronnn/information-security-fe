@@ -1,13 +1,15 @@
-import 'react-image-lightbox-rotation/style.css';
-
 import * as React from 'react';
-import { CgSpinner } from 'react-icons/cg';
-import Lightbox from 'react-image-lightbox-rotation';
+import { CgFileDocument, CgSpinner } from 'react-icons/cg';
+import { FiTrash } from 'react-icons/fi';
+import { HiOutlineExternalLink } from 'react-icons/hi';
 import { Document, Page } from 'react-pdf';
 
+import Button from '@/components/buttons/Button';
+import ButtonLink from '@/components/links/ButtonLink';
 import Typography from '@/components/typography/Typography';
 import api from '@/lib/axios';
 import { buildGetFileUrl } from '@/lib/file';
+import { FileWithPreview } from '@/types/dropzone';
 
 type FileFetchProps = {
   filePath: string;
@@ -15,11 +17,24 @@ type FileFetchProps = {
   width?: number;
   height?: number;
   fileClassName?: string;
+  file: FileWithPreview;
+  file_name: string;
+  deleteFile?: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    file: FileWithPreview,
+  ) => void;
+  withOption?: boolean;
 } & React.ComponentPropsWithoutRef<'div'>;
 
-const FileFetch = ({ filePath, ...props }: FileFetchProps) => {
+const FileFetch = ({
+  filePath,
+  file_name,
+  withOption = true,
+  deleteFile,
+  file,
+  ...props
+}: FileFetchProps) => {
   const [fileSrc, setFileSrc] = React.useState<string>();
-  const [isOpen, setIsOpen] = React.useState(false);
 
   const getFileURL = React.useCallback(async ({ url }: { url: string }) => {
     api
@@ -35,7 +50,7 @@ const FileFetch = ({ filePath, ...props }: FileFetchProps) => {
   React.useEffect(() => {
     if (filePath) {
       const getFileUrl = buildGetFileUrl({
-        base_url: '/api/file',
+        base_url: '/api/file/get',
         mode: 'aes',
         filename: filePath,
       });
@@ -43,11 +58,22 @@ const FileFetch = ({ filePath, ...props }: FileFetchProps) => {
     }
   }, [getFileURL, filePath]);
 
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    deleteFile?.(e, file);
+  };
+
   return (
     <>
       <div {...props} className='cursor-pointer'>
         {fileSrc && (
-          <div className='flex justify-center min-w-full w-fit py-4 rounded-lg'>
+          <div
+            className='flex flex-col md:flex-row justify-center gap-2 min-w-full w-fit py-4 rounded-lg'
+            style={{
+              width: '100%',
+              height: 'auto',
+            }}
+          >
             <Document
               file={fileSrc as string}
               loading={
@@ -64,21 +90,43 @@ const FileFetch = ({ filePath, ...props }: FileFetchProps) => {
             >
               <Page
                 pageNumber={1}
-                height={400}
                 renderTextLayer={false}
                 renderAnnotationLayer={false}
                 className='border'
-                onClick={() => setIsOpen(true)}
               />
             </Document>
+
+            {withOption && (
+              <div className='flex justify-between md:flex-col h-full gap-2'>
+                <div className='flex items-center gap-2 md:hidden'>
+                  <CgFileDocument className='text-lg' />
+                  <Typography variant='d' className='text-base-tertiary'>
+                    {file_name}
+                  </Typography>
+                </div>
+                <div className='flex items-center md:flex-col gap-2'>
+                  <ButtonLink
+                    href={fileSrc as string}
+                    openNewTab
+                    target='_blank'
+                    icon={HiOutlineExternalLink}
+                    variant='outline'
+                    size='icon'
+                    className='hover:bg-gray-100 focus:ring-0'
+                    buttonClassName='rounded text-gray-500'
+                    iconClassName='text-mid'
+                  />
+                  <Button
+                    icon={FiTrash}
+                    variant='outline'
+                    size='icon'
+                    className='text-red-500 hover:bg-red-100 rounded focus:ring-0'
+                    onClick={handleDelete}
+                  />
+                </div>
+              </div>
+            )}
           </div>
-        )}
-        {isOpen && (
-          <Lightbox
-            mainSrc={fileSrc as string}
-            rotate={0}
-            onCloseRequest={() => setIsOpen(false)}
-          />
         )}
       </div>
     </>

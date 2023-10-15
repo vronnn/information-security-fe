@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import * as React from 'react';
 import { Accept, FileRejection, useDropzone } from 'react-dropzone';
 import { Controller, get, useFormContext } from 'react-hook-form';
+import { AiOutlineFieldTime } from 'react-icons/ai';
 import { CgSpinner } from 'react-icons/cg';
 import { TbPhotoOff } from 'react-icons/tb';
 
@@ -30,6 +31,7 @@ type EditorDropzoneInputProps = {
   validation?: Record<string, unknown>;
   className?: string;
   defaultTab?: 'editor' | 'preview';
+  rows?: number;
 };
 
 type onDropFileResponse = {
@@ -44,6 +46,7 @@ type onDropFileResponse = {
   aes_gcm?: string;
   aes_nonce?: string;
   aes_result: string;
+  elapsed_time: string;
 };
 
 type onDropFileRequirement = {
@@ -62,6 +65,7 @@ export default function EditorDropzone({
   validation,
   className,
   defaultTab = 'editor',
+  rows = 6,
 }: EditorDropzoneInputProps) {
   const {
     control,
@@ -97,11 +101,18 @@ export default function EditorDropzone({
     mutateAsync: encryptFile,
     isLoading: encryptFileIsLoading,
     data: encryptedData,
+    reset: resetFile,
   } = useMutation<
     AxiosResponse<ApiReturn<onDropFileResponse>>,
     AxiosError<ApiError>,
     onDropFileRequirement
-  >((data) => api.post(url, data));
+  >((data) =>
+    api.post(url, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }),
+  );
 
   const fileValue = getValues(id);
   const [file, setFile] = React.useState<FileWithPreview | null>(
@@ -177,6 +188,8 @@ export default function EditorDropzone({
       shouldDirty: true,
       shouldTouch: true,
     });
+    setContent('');
+    resetFile();
   };
 
   const { getRootProps, getInputProps, isDragActive, isFocused, isDragReject } =
@@ -199,10 +212,11 @@ export default function EditorDropzone({
           className={clsxm(
             'rounded-lg border border-gray-300 p-2 relative',
             withLabel && 'pt-0',
+            helperText && 'pb-0',
           )}
         >
-          {withLabel && (
-            <div className='py-1'>
+          <div className='py-1 px-0.5 flex items-center justify-between'>
+            {withLabel && (
               <Typography
                 as='label'
                 variant='s3'
@@ -211,8 +225,16 @@ export default function EditorDropzone({
               >
                 {label}
               </Typography>
-            </div>
-          )}
+            )}
+            {encryptedData?.data.data.elapsed_time && (
+              <div className='flex items-center gap-1'>
+                <AiOutlineFieldTime />
+                <Typography variant='b4' className='text-base-black'>
+                  {encryptedData.data.data.elapsed_time}
+                </Typography>
+              </div>
+            )}
+          </div>
           {readOnly && !file && (
             <div
               className={clsxm(
@@ -253,7 +275,7 @@ export default function EditorDropzone({
                       )}
                     >
                       <textarea
-                        rows={6}
+                        rows={rows}
                         placeholder='Write something or drag and drop file here'
                         className='w-full h-full px-3.5 py-2.5 text-mid focus:outline-none'
                         onChange={(e) => {
@@ -263,20 +285,19 @@ export default function EditorDropzone({
                       />
                     </div>
                   </div>
-
-                  <div className='pt-1 flex items-center gap-1'>
+                  <div className='flex items-center gap-1 py-1.5 px-0.5'>
                     {encryptFileIsLoading && (
-                      <CgSpinner className='animate-spin mt-1' />
+                      <CgSpinner className='animate-spin' />
                     )}
                     {isDragReject ? (
-                      <Typography variant='c0' className='text-red-500 mt-1'>
+                      <Typography variant='c0' className='text-red-500'>
                         Please drop the supported file extension only
                       </Typography>
                     ) : (
                       helperText && (
                         <Typography
                           variant='c0'
-                          className='mt-1 text-base-secondary'
+                          className='text-base-secondary'
                         >
                           {encryptFileIsLoading
                             ? 'Wait for file encryption...'
@@ -286,7 +307,7 @@ export default function EditorDropzone({
                     )}
                   </div>
                   {!hideError && error && (
-                    <Typography variant='c2' className='mt-1 text-red-500'>
+                    <Typography variant='c2' className='pb-1.5 text-red-500'>
                       {error.message?.toString()}
                     </Typography>
                   )}
@@ -299,13 +320,15 @@ export default function EditorDropzone({
       <TabsContent value='preview'>
         {encryptedData ? (
           <FileDisplay
+            file={file!}
+            file_name={encryptedData.data.data.file_name}
             readOnly={readOnly}
             deleteFile={deleteFile}
             encryption={encryptedData.data.data.encryption}
             file_type={encryptedData.data.data.file_type}
           />
         ) : (
-          <div className='min-h-[13.85rem] rounded-lg border border-gray-300 p-2 grid place-items-center'>
+          <div className='min-h-[16.65rem] rounded-lg border border-gray-300 p-2 grid place-items-center'>
             <Typography variant='d' className='text-[#9a9a9a]'>
               No file uploaded yet
             </Typography>

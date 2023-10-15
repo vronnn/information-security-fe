@@ -32,14 +32,30 @@ type registerAccResponse = {
 export default function RegisterPage() {
   const router = useRouter();
   const methods = useForm<registerAccForm>();
-  const { handleSubmit } = methods;
-  const { mutateAsync: register, isLoading: registerIsLoading } =
-    useMutationToast<registerAccResponse, registerAccForm>(
-      useMutation((data) => api.post('/api/user', data)),
-    );
+  const { handleSubmit, watch } = methods;
+  const wemail = watch('email');
+  const {
+    mutateAsync: register,
+    isLoading: registerIsLoading,
+    error,
+  } = useMutationToast<registerAccResponse, registerAccForm>(
+    useMutation((data) => api.post('/api/user', data)),
+  );
   const onSubmit = (data: registerAccForm) => {
     register(data).then(() => router.push('/register/activate'));
   };
+
+  const { mutateAsync: resend, isLoading: resendIsLoading } = useMutationToast<
+    void,
+    { email: string }
+  >(useMutation((data) => api.post('/api/user/verification-email', data)));
+
+  const handleResend = () => {
+    resend({ email: wemail }).then(() => {
+      router.push('/register/activate');
+    });
+  };
+
   return (
     <main className='min-h-screen pt-10 sm:pt-20'>
       <section className='flex flex-col gap-y-2.5 sm:flex-row sm:items-center px-6 sm:px-0'>
@@ -164,8 +180,21 @@ export default function RegisterPage() {
                   <Typography variant='h3'>Workhub</Typography>
                 </UnstyledLink>
                 <div className='flex items-center gap-2.5'>
-                  {/* <Button variant='outline'>Resend verification</Button> */}
-                  <Button type='submit' isLoading={registerIsLoading}>
+                  {error?.response?.data.error === 'email already exist' && (
+                    <Button
+                      type='button'
+                      autoFocus
+                      onClick={handleResend}
+                      variant='outline'
+                      isLoading={resendIsLoading || registerIsLoading}
+                    >
+                      Resend verification
+                    </Button>
+                  )}
+                  <Button
+                    type='submit'
+                    isLoading={registerIsLoading || resendIsLoading}
+                  >
                     Next Step
                   </Button>
                 </div>

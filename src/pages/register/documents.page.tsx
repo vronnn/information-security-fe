@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -80,8 +79,8 @@ function DocumentsPage() {
           <FormProvider {...methods}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className='flex flex-col md:flex-row items-start justify-evenly w-10/12 gap-6 mx-auto'>
-                <div className='w-full order-2 md:order-1 md:basis-1/2'>
-                  <div className='space-y-10 md:max-w-md md:ml-auto'>
+                <div className='w-full'>
+                  <div className='space-y-10 md:w-9/12 mx-auto'>
                     <EditorDropzone
                       id='ktp'
                       label='ID card'
@@ -89,8 +88,9 @@ function DocumentsPage() {
                       accept={{
                         'image/*': ['.png', '.jpg', '.jpeg'],
                       }}
-                      helperText='Attach files with .png, .jpg, or .jpeg extension max 1 MB.'
+                      helperText='Attach files with .png, .jpg, .jpeg, or .webp extension max 1 MB.'
                       maxSize={1000000}
+                      rows={8}
                     />
                     <EditorDropzone
                       id='cv'
@@ -100,7 +100,8 @@ function DocumentsPage() {
                         'application/pdf': ['.pdf'],
                       }}
                       helperText='Attach files with .pdf extension only max 2 MB.'
-                      maxSize={2000000}
+                      maxSize={5000000}
+                      rows={8}
                     />
                     <EditorDropzone
                       id='introduction_video'
@@ -112,12 +113,13 @@ function DocumentsPage() {
                         'video/*': ['.mp4', '.mov'],
                       }}
                       helperText='Attach files with .mp4 or .mov extension max 20 MB.'
-                      maxSize={20000000}
+                      maxSize={50000000}
+                      rows={8}
                     />
                   </div>
                 </div>
-                <div className='basis-1/2 sticky top-0 order-1 md:order-2'>
-                  <div className='max-w-lg h-full flex items-center max-h-96 overflow-hidden'>
+                {/* <div className='w-full md:w-1/2 md:basis-1/2 md:sticky top-0 order-1 md:order-2'>
+                  <div className='max-w-xs mx-auto md:mx-0 md:max-w-lg h-full flex items-center max-h-96 overflow-hidden'>
                     <Image
                       src='/work-from-home.svg'
                       alt='regist-illustration'
@@ -126,7 +128,7 @@ function DocumentsPage() {
                       className='scale-x-[-1]'
                     />
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className='flex justify-between items-center w-10/12 max-w-7xl mx-auto min-h-[6rem]'>
                 <UnstyledLink

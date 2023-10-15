@@ -1,11 +1,11 @@
-import 'react-image-lightbox-rotation/style.css';
-
 import * as React from 'react';
-import Lightbox from 'react-image-lightbox-rotation';
+import { FiTrash } from 'react-icons/fi';
 
+import Button from '@/components/buttons/Button';
 import api from '@/lib/axios';
 import clsxm from '@/lib/clsxm';
 import { buildGetFileUrl } from '@/lib/file';
+import { FileWithPreview } from '@/types/dropzone';
 
 type VideoFetchProps = {
   vidPath: string;
@@ -13,16 +13,26 @@ type VideoFetchProps = {
   width?: number;
   height?: number;
   vidClassName?: string;
+  fileClassName?: string;
+  file: FileWithPreview;
+  file_name: string;
+  deleteFile?: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    file: FileWithPreview,
+  ) => void;
+  withOption?: boolean;
 } & React.ComponentPropsWithoutRef<'div'>;
 
 const VideoFetch = ({
   vidPath,
   className,
   vidClassName,
+  withOption = true,
+  deleteFile,
+  file,
   ...props
 }: VideoFetchProps) => {
   const [vidSrc, setVideoSrc] = React.useState<string>();
-  const [isOpen, setIsOpen] = React.useState(false);
 
   const getVideoURL = React.useCallback(async ({ url }: { url: string }) => {
     api
@@ -38,7 +48,7 @@ const VideoFetch = ({
   React.useEffect(() => {
     if (vidPath) {
       const getFileUrl = buildGetFileUrl({
-        base_url: '/api/file',
+        base_url: '/api/file/get',
         mode: 'aes',
         filename: vidPath,
       });
@@ -46,28 +56,39 @@ const VideoFetch = ({
     }
   }, [getVideoURL, vidPath]);
 
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.stopPropagation();
+    deleteFile?.(e, file);
+  };
+
   return (
     <>
-      <div {...props} className='cursor-pointer'>
+      <div {...props}>
         {vidSrc && (
           <div
-            className={clsxm('flex justify-center py-4 rounded-lg', className)}
+            className={clsxm(
+              'flex justify-center py-4 rounded-lg gap-2',
+              className,
+            )}
           >
             <video
               src={vidSrc as string}
               controls
-              style={{ maxWidth: '100%', maxHeight: '200px' }}
+              style={{ maxWidth: '100%', maxHeight: '266px' }}
               className={vidClassName}
-              onClick={() => setIsOpen(true)}
             />
+            {withOption && (
+              <div className='flex flex-col h-full gap-2'>
+                <Button
+                  icon={FiTrash}
+                  variant='outline'
+                  size='icon'
+                  className='text-red-500 hover:bg-red-100 rounded focus:ring-0'
+                  onClick={handleDelete}
+                />
+              </div>
+            )}
           </div>
-        )}
-        {isOpen && (
-          <Lightbox
-            mainSrc={vidSrc as string}
-            rotate={0}
-            onCloseRequest={() => setIsOpen(false)}
-          />
         )}
       </div>
     </>
