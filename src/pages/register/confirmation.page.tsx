@@ -1,3 +1,4 @@
+import { useMutation } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -7,29 +8,38 @@ import { PiRocketBold } from 'react-icons/pi';
 
 import Button from '@/components/buttons/Button';
 import SearchableSelectInput from '@/components/form/SearchableSelectInput';
+import WithAuth from '@/components/hoc/WithAuth';
 import UnstyledLink from '@/components/links/UnstyledLink';
 import Typography from '@/components/typography/Typography';
+import useMutationToast from '@/hooks/useMutationToast';
+import api from '@/lib/axios';
 
 type positionForm = {
-  position: string;
+  work: string;
 };
 
 const PositionOptions: { value: string; label: string }[] = [
-  { value: 'uiux', label: 'UI / UX' },
-  { value: 'frontend', label: 'Frontend Developer' },
-  { value: 'backend', label: 'Backend Developer' },
-  { value: 'devops', label: 'Development and Operations' },
+  { value: 'UI / UX', label: 'UI / UX' },
+  { value: 'Frontend Developer', label: 'Frontend Developer' },
+  { value: 'Backend Developer', label: 'Backend Developer' },
+  { value: 'Development and Operations', label: 'Development and Operations' },
 ];
 
-export default function ConfirmationPage() {
+export default WithAuth(ConfirmationPage, ['user']);
+function ConfirmationPage() {
   const router = useRouter();
   const methods = useForm<positionForm>();
   const { handleSubmit } = methods;
+  const { mutateAsync: patchWork, isLoading } = useMutationToast<
+    void,
+    positionForm
+  >(useMutation((data) => api.put('/api/user', data)));
   const onSubmit = (data: positionForm) => {
-    // eslint-disable-next-line no-console
-    console.log(data);
-    router.push('/');
+    patchWork(data)
+      .then(() => router.push('/'))
+      .catch(() => {});
   };
+
   return (
     <main className='min-h-screen pt-10 sm:pt-20'>
       <section className='flex flex-col gap-y-2.5 sm:flex-row sm:items-center px-6 sm:px-0'>
@@ -95,7 +105,7 @@ export default function ConfirmationPage() {
               <div className='flex flex-col justify-start w-10/12 gap-6 mx-auto'>
                 <div className='space-y-4 w-full md:max-w-2xl mx-auto'>
                   <SearchableSelectInput
-                    id='position'
+                    id='work'
                     label={null}
                     placeholder='Pick your dream position'
                     options={PositionOptions}
@@ -114,7 +124,9 @@ export default function ConfirmationPage() {
                   <Typography variant='h3'>Workhub</Typography>
                 </UnstyledLink>
                 <div>
-                  <Button type='submit'>Next Step</Button>
+                  <Button type='submit' isLoading={isLoading}>
+                    Submit
+                  </Button>
                 </div>
               </div>
             </form>
