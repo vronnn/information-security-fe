@@ -17,6 +17,7 @@ type registerAccForm = {
   name: string;
   email: string;
   password: string;
+  telp_number: string;
 };
 
 type registerAccResponse = {
@@ -113,7 +114,7 @@ export default function RegisterPage() {
                       validation={{ required: 'Email must be filled' }}
                     />
                     <Input
-                      id='phone'
+                      id='telp_number'
                       type='text'
                       label='Phone Number'
                       addon='+62'

@@ -12,21 +12,43 @@ import UnstyledLink from '@/components/links/UnstyledLink';
 import Typography from '@/components/typography/Typography';
 import useMutationToast from '@/hooks/useMutationToast';
 import api from '@/lib/axios';
+import { setToken } from '@/lib/cookies';
+import useAuthStore from '@/store/useAuthStore';
+import { ApiReturn } from '@/types/api';
+import { MeRespond } from '@/types/entities/user';
 
 type activationAccForm = {
   token: string;
 };
 
+type activationAccResponse = {
+  token: string;
+  email: string;
+  is_verified: boolean;
+  role: 'user' | 'admin';
+};
+
 export default function ActivatePage() {
   const router = useRouter();
+  const login = useAuthStore.useLogin();
   const methods = useForm<activationAccForm>();
   const { handleSubmit } = methods;
   const { mutateAsync: activate, isLoading: activateIsLoading } =
-    useMutationToast<void, activationAccForm>(
-      useMutation((data) => api.post('/api/user', data)),
+    useMutationToast<activationAccResponse, activationAccForm>(
+      useMutation((data) => api.post('/api/user/verify-email', data)),
     );
   const onSubmit = async (data: activationAccForm) => {
-    activate(data).then(() => router.push('/register/documents'));
+    activate(data).then((res) => {
+      const { token } = res.data.data;
+      setToken(token);
+      api.get<ApiReturn<MeRespond>>('/api/user/me').then((res) => {
+        login({
+          ...res.data.data,
+          token: token,
+        });
+        router.replace('/register/documents');
+      });
+    });
   };
   return (
     <main className='min-h-screen pt-20'>

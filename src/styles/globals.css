@@ -31,6 +31,10 @@
   @apply mx-auto w-full md:max-w-[95%];
 }
 
+.min-h-main {
+  @apply min-h-[calc(100vh-3.5rem)] lg:min-h-[calc(100vh-4rem)];
+}
+
 .layout {
   max-width: 78.75rem;
   @apply mx-auto w-11/12;

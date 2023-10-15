@@ -7,6 +7,7 @@ import { PiRocketBold } from 'react-icons/pi';
 
 import Button from '@/components/buttons/Button';
 import EditorDropzone from '@/components/form/EditorDropzone';
+import WithAuth from '@/components/hoc/WithAuth';
 import UnstyledLink from '@/components/links/UnstyledLink';
 import Typography from '@/components/typography/Typography';
 
@@ -15,8 +16,8 @@ type documentsForm = {
   cv: File;
   introduction_video: File;
 };
-
-export default function DocumentsPage() {
+export default WithAuth(DocumentsPage, ['user']);
+function DocumentsPage() {
   const router = useRouter();
   const methods = useForm<documentsForm>();
   const { handleSubmit } = methods;
@@ -89,7 +90,7 @@ export default function DocumentsPage() {
                         'image/*': ['.png', '.jpg', '.jpeg'],
                       }}
                       helperText='Attach files with .png, .jpg, or .jpeg extension max 1 MB.'
-                      maxSize={100000000}
+                      maxSize={1000000}
                     />
                     <EditorDropzone
                       id='cv'
@@ -99,7 +100,7 @@ export default function DocumentsPage() {
                         'application/pdf': ['.pdf'],
                       }}
                       helperText='Attach files with .pdf extension only max 2 MB.'
-                      maxSize={100000000}
+                      maxSize={2000000}
                     />
                     <EditorDropzone
                       id='introduction_video'
@@ -111,7 +112,7 @@ export default function DocumentsPage() {
                         'video/*': ['.mp4', '.mov'],
                       }}
                       helperText='Attach files with .mp4 or .mov extension max 20 MB.'
-                      maxSize={100000000}
+                      maxSize={20000000}
                     />
                   </div>
                 </div>

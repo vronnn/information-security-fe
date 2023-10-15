@@ -7,6 +7,7 @@ import { Document, Page } from 'react-pdf';
 
 import Typography from '@/components/typography/Typography';
 import api from '@/lib/axios';
+import { buildGetFileUrl } from '@/lib/file';
 
 type FileFetchProps = {
   filePath: string;
@@ -33,7 +34,12 @@ const FileFetch = ({ filePath, ...props }: FileFetchProps) => {
 
   React.useEffect(() => {
     if (filePath) {
-      getFileURL({ url: `/api/file/${filePath}` });
+      const getFileUrl = buildGetFileUrl({
+        base_url: '/api/file',
+        mode: 'aes',
+        filename: filePath,
+      });
+      getFileURL({ url: getFileUrl });
     }
   }, [getFileURL, filePath]);
 

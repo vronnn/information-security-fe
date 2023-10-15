@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/Tabs';
 import Typography from '@/components/typography/Typography';
 import api from '@/lib/axios';
 import clsxm from '@/lib/clsxm';
+import { buildPostFileUrl } from '@/lib/file';
 import { ApiError, ApiReturn } from '@/types/api';
 import { FileWithPreview } from '@/types/dropzone';
 
@@ -28,6 +29,7 @@ type EditorDropzoneInputProps = {
   hideError?: boolean;
   validation?: Record<string, unknown>;
   className?: string;
+  defaultTab?: 'editor' | 'preview';
 };
 
 type onDropFileResponse = {
@@ -38,8 +40,9 @@ type onDropFileResponse = {
   aws_key: string;
   aes_plain_text: string;
   aes_block_cipher: string;
-  aes_gcm: string;
-  aes_nonce: string;
+  aes_ciphertext?: string;
+  aes_gcm?: string;
+  aes_nonce?: string;
   aes_result: string;
 };
 
@@ -58,6 +61,7 @@ export default function EditorDropzone({
   maxSize = 1000000,
   validation,
   className,
+  defaultTab = 'editor',
 }: EditorDropzoneInputProps) {
   const {
     control,
@@ -84,6 +88,11 @@ export default function EditorDropzone({
   //   [],
   // );
 
+  const url = buildPostFileUrl({
+    base_url: '/api/file',
+    mode: 'aes',
+  });
+
   const {
     mutateAsync: encryptFile,
     isLoading: encryptFileIsLoading,
@@ -92,7 +101,7 @@ export default function EditorDropzone({
     AxiosResponse<ApiReturn<onDropFileResponse>>,
     AxiosError<ApiError>,
     onDropFileRequirement
-  >((data) => api.post('/api/file', data));
+  >((data) => api.post(url, data));
 
   const fileValue = getValues(id);
   const [file, setFile] = React.useState<FileWithPreview | null>(
@@ -117,15 +126,30 @@ export default function EditorDropzone({
           preview: URL.createObjectURL(acceptedFile),
         });
         setContent('Uploading file...');
+        // console.log({
+        //   file: acceptedFilePreview,
+        //   file_type: acceptedFile.type.startsWith('video/')
+        //     ? 'video'
+        //     : acceptedFile.type.startsWith('image/')
+        //     ? 'image'
+        //     : 'file',
+        // });
+
         await encryptFile({
-          file: acceptedFile,
+          file: acceptedFilePreview,
           file_type: acceptedFile.type.startsWith('video/')
             ? 'video'
             : acceptedFile.type.startsWith('image/')
             ? 'image'
             : 'file',
         }).then((res) => {
-          setContent(res.data.data.aes_gcm);
+          setContent(
+            res.data.data.aes_gcm
+              ? res.data.data.aes_gcm
+              : res.data.data.aes_ciphertext
+              ? res.data.data.aes_ciphertext
+              : res.data.data.aes_result,
+          );
         });
         setFile(acceptedFilePreview);
         setValue(id, acceptedFilePreview, {
@@ -165,7 +189,7 @@ export default function EditorDropzone({
     });
 
   return (
-    <Tabs defaultValue='editor' className={clsxm('w-full', className)}>
+    <Tabs defaultValue={defaultTab} className={clsxm('w-full', className)}>
       <TabsList>
         <TabsTrigger value='editor'>Write</TabsTrigger>
         <TabsTrigger value='preview'>Preview</TabsTrigger>
@@ -281,7 +305,11 @@ export default function EditorDropzone({
             file_type={encryptedData.data.data.file_type}
           />
         ) : (
-          <div className='min-h-[13.85rem]'></div>
+          <div className='min-h-[13.85rem] rounded-lg border border-gray-300 p-2 grid place-items-center'>
+            <Typography variant='d' className='text-[#9a9a9a]'>
+              No file uploaded yet
+            </Typography>
+          </div>
         )}
       </TabsContent>
     </Tabs>

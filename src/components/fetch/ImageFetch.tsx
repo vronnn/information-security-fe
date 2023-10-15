@@ -6,6 +6,7 @@ import Lightbox from 'react-image-lightbox-rotation';
 
 import api from '@/lib/axios';
 import clsxm from '@/lib/clsxm';
+import { buildGetFileUrl } from '@/lib/file';
 
 type ImageFetchProps = {
   imgPath: string;
@@ -51,7 +52,12 @@ const ImageFetch = ({
 
   React.useEffect(() => {
     if (imgPath) {
-      getImageURL({ url: `/api/file/${imgPath}` });
+      const getFileUrl = buildGetFileUrl({
+        base_url: '/api/file',
+        mode: 'aes',
+        filename: imgPath,
+      });
+      getImageURL({ url: getFileUrl });
     }
   }, [getImageURL, imgPath]);
 

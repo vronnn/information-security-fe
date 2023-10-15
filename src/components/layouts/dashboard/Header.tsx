@@ -53,8 +53,8 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                     />
                     <div className='hidden min-w-0 flex-1 flex-col items-start sm:flex text-base-dark'>
                       <Typography variant='b4'>Zhafran</Typography>
-                      <Typography variant='s4' className='text-base-black'>
-                        Admin
+                      <Typography variant='s4' className='text-base-secondary'>
+                        Applicant
                       </Typography>
                     </div>
                   </Menu.Button>

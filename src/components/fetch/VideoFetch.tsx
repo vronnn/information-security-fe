@@ -5,6 +5,7 @@ import Lightbox from 'react-image-lightbox-rotation';
 
 import api from '@/lib/axios';
 import clsxm from '@/lib/clsxm';
+import { buildGetFileUrl } from '@/lib/file';
 
 type VideoFetchProps = {
   vidPath: string;
@@ -36,7 +37,12 @@ const VideoFetch = ({
 
   React.useEffect(() => {
     if (vidPath) {
-      getVideoURL({ url: `/api/file/${vidPath}` });
+      const getFileUrl = buildGetFileUrl({
+        base_url: '/api/file',
+        mode: 'aes',
+        filename: vidPath,
+      });
+      getVideoURL({ url: getFileUrl });
     }
   }, [getVideoURL, vidPath]);
 

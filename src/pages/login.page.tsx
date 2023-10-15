@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
@@ -9,23 +10,44 @@ import Layout from '@/components/layouts/Layout';
 import Seo from '@/components/Seo';
 import useMutationToast from '@/hooks/useMutationToast';
 import api from '@/lib/axios';
+import { setToken } from '@/lib/cookies';
+import useAuthStore from '@/store/useAuthStore';
+import { ApiReturn } from '@/types/api';
+import { MeRespond } from '@/types/entities/user';
 
 export type LoginForm = {
   email: string;
   password: string;
 };
 
+type LoginResponse = {
+  token: string;
+  role: 'user' | 'admin';
+};
+
 export default function LoginPage() {
+  const login = useAuthStore.useLogin();
+  const router = useRouter();
   const methods = useForm<LoginForm>({
     mode: 'onChange',
   });
   const { handleSubmit } = methods;
-  const { mutateAsync: login, isLoading: loginIsLoading } = useMutationToast<
-    LoginForm,
-    LoginForm
-  >(useMutation((data) => api.post('api/login', data)));
+  const { mutateAsync: loginUser, isLoading: loginIsLoading } =
+    useMutationToast<LoginResponse, LoginForm>(
+      useMutation((data) => api.post('/api/user/login', data)),
+    );
   const onSubmit = (data: LoginForm) => {
-    login(data);
+    loginUser(data).then((res) => {
+      const { token } = res.data.data;
+      setToken(token);
+      api.get<ApiReturn<MeRespond>>('/api/user/me').then((res) => {
+        login({
+          ...res.data.data,
+          token: token,
+        });
+        router.replace('/register/documents');
+      });
+    });
   };
   return (
     <Layout>

@@ -3,18 +3,10 @@ import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { IconType } from 'react-icons';
-import { BiBuildings } from 'react-icons/bi';
-import { CgBowl } from 'react-icons/cg';
-import { FaStethoscope, FaUserNurse } from 'react-icons/fa';
-import { FiChevronDown, FiCornerDownRight } from 'react-icons/fi';
-import { GiMedicines } from 'react-icons/gi';
-import {
-  MdAccessible,
-  MdOutlineMedicalServices,
-  MdPostAdd,
-} from 'react-icons/md';
+import { FaStethoscope } from 'react-icons/fa';
+import { FiChevronDown } from 'react-icons/fi';
 import { RiServiceLine } from 'react-icons/ri';
-import { TbCreditCard, TbDiscount } from 'react-icons/tb';
+import { TbCreditCard } from 'react-icons/tb';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
 import clsxm from '@/lib/clsxm';
@@ -38,105 +30,22 @@ type NavigationProps = React.ComponentPropsWithoutRef<'nav'>;
 const navigations: Navigations = [
   [
     {
-      name: 'Resep Dokter',
-      href: '/apotek/resep-dokter',
-      icon: CgBowl,
-    },
-    {
-      name: 'Obat',
-      href: '/apotek/obat',
-      icon: GiMedicines,
-      children: [
-        {
-          name: 'Master Obat',
-          href: '/apotek/obat',
-          exactMatch: true,
-          icon: FiCornerDownRight,
-        },
-        {
-          name: 'Dead Stock',
-          href: '/apotek/obat/obat-expired',
-          icon: FiCornerDownRight,
-        },
-        {
-          name: 'Near Dead Stock',
-          href: '/apotek/obat/obat-near-expired',
-          icon: FiCornerDownRight,
-        },
-      ],
-    },
-    {
-      name: 'Permintaan Obat',
-      href: '#',
-      icon: MdPostAdd,
-      children: [
-        {
-          name: 'Pre Order',
-          href: '/apotek/pre-order',
-          icon: FiCornerDownRight,
-        },
-        {
-          name: 'Stock In',
-          href: '/apotek/stock-in',
-          icon: FiCornerDownRight,
-        },
-      ],
-    },
-    {
-      name: 'Vendor',
-      href: '#',
-      icon: BiBuildings,
-      children: [
-        {
-          name: 'List Vendor',
-          href: '/apotek/vendor',
-          icon: FiCornerDownRight,
-        },
-      ],
-    },
-    {
-      name: 'Diskon',
-      href: '/apotek/diskon',
-      icon: TbDiscount,
-    },
-  ],
-  [
-    {
-      name: 'Sesi Berobat',
-      href: '/klinik/sesi-berobat',
-      icon: MdOutlineMedicalServices,
-    },
-    {
-      name: 'Pasien',
-      href: '/klinik/pasien',
-      icon: MdAccessible,
-    },
-  ],
-  [
-    {
-      name: 'Perawat',
-      href: '/perawat',
-      icon: FaUserNurse,
-    },
-  ],
-  [
-    {
-      name: 'Dokter',
-      href: '/dokter',
+      name: 'Profile',
+      href: '/dashboard/profile',
       icon: FaStethoscope,
     },
   ],
   [
     {
-      name: 'POS',
-      href: '/pos',
+      name: 'Document',
+      href: '/dashboard',
       icon: TbCreditCard,
     },
   ],
   [
     {
-      name: 'Layanan',
-      href: '/klinik/layanan',
+      name: 'Workspace',
+      href: '/dashboard/workspace',
       icon: RiServiceLine,
     },
   ],
@@ -262,7 +171,7 @@ function NavigationLink({
       className={clsxm(
         isActive
           ? 'bg-blue-600 text-white'
-          : 'text-base-dark hover:bg-blue-500 hover:text-white',
+          : 'text-base-dark hover:bg-blue-100 hover:text-blue-600',
         'group flex items-center rounded-md px-2 py-2 text-sm font-medium',
         'focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500  focus-visible:ring-offset-blue-500',
         'transition duration-100',
@@ -273,8 +182,10 @@ function NavigationLink({
       <navigation.icon
         className={clsx(
           'mr-1.5 flex-shrink-0',
-          'text-lg group-hover:text-white',
-          isActive ? 'text-white' : 'text-typo-secondary',
+          'text-lg',
+          isActive
+            ? 'text-white group-hover:text-white'
+            : 'text-typo-secondary group-hover:text-blue-600',
         )}
         aria-hidden='true'
       />
