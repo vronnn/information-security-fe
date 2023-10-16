@@ -14,6 +14,7 @@ type HeaderProps = {
 };
 
 export default function Header({ setSidebarOpen }: HeaderProps) {
+  const user = useAuthStore.useUser();
   const logout = useAuthStore((state) => state.logout);
   const userNavigation = [{ name: 'Sign out', handleClick: logout }];
 
@@ -54,9 +55,9 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                       alt='avatar'
                     />
                     <div className='hidden min-w-0 flex-1 flex-col items-start sm:flex text-base-dark'>
-                      <Typography variant='b4'>Zhafran</Typography>
+                      <Typography variant='b4'>{user?.name}</Typography>
                       <Typography variant='s4' className='text-base-secondary'>
-                        Applicant
+                        {user?.role}
                       </Typography>
                     </div>
                   </Menu.Button>

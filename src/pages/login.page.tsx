@@ -45,7 +45,11 @@ export default function LoginPage() {
           ...res.data.data,
           token: token,
         });
-        router.replace('/register/documents');
+        router.replace(
+          res.data.data.role === 'user'
+            ? '/register/documents'
+            : '/dashboard/admin',
+        );
       });
     });
   };

@@ -3,12 +3,14 @@ import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { IconType } from 'react-icons';
-import { AiOutlineUser } from 'react-icons/ai';
+import { AiOutlineUser, AiOutlineUsergroupAdd } from 'react-icons/ai';
 import { FiBriefcase, FiChevronDown } from 'react-icons/fi';
+import { MdOutlineTipsAndUpdates } from 'react-icons/md';
 import { TiDocument } from 'react-icons/ti';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
 import clsxm from '@/lib/clsxm';
+import useAuthStore from '@/store/useAuthStore';
 
 export type Navigation = {
   name: string;
@@ -33,36 +35,49 @@ const navigations: Navigations = [
       href: '/dashboard/profile',
       icon: AiOutlineUser,
     },
-  ],
-  [
     {
       name: 'Document',
       href: '/dashboard',
       icon: TiDocument,
     },
-  ],
-  [
     {
       name: 'Workspace',
       href: '/dashboard/workspace',
       icon: FiBriefcase,
     },
   ],
+  [
+    {
+      name: 'Profile',
+      href: '/dashboard/admin/profile',
+      icon: AiOutlineUser,
+    },
+    {
+      name: 'User Management',
+      href: '/dashboard/admin',
+      icon: AiOutlineUsergroupAdd,
+    },
+    {
+      name: 'Patch',
+      href: '/dashboard/admin/patch',
+      icon: MdOutlineTipsAndUpdates,
+    },
+  ],
 ];
 
 export default function Navigation({ className, ...rest }: NavigationProps) {
+  const user = useAuthStore.useUser();
+  const roles = user?.role === 'user' ? 0 : 1;
   return (
     <nav className={clsxm('px-2 md:px-3', className)} {...rest}>
       <div className='space-y-1.5'>
-        {navigations.map((navs) =>
-          navs.map((nav) => {
-            return nav.children ? (
-              <NestedNavigation key={nav.name} navigation={nav} />
-            ) : (
-              <NavigationLink key={nav.name} navigation={nav} />
-            );
-          }),
-        )}
+        {navigations[roles].map((nav) => {
+          return nav.children ? (
+            <NestedNavigation key={nav.name} navigation={nav} />
+          ) : (
+            <NavigationLink key={nav.name} navigation={nav} />
+          );
+        })}
       </div>
     </nav>
   );
