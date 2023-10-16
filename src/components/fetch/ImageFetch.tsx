@@ -21,7 +21,7 @@ type ImageFetchProps = {
   height?: number;
   imgClassName?: string;
   alt: string;
-  file: FileWithPreview;
+  file?: FileWithPreview;
   file_name: string;
   deleteFile?: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -82,7 +82,7 @@ const ImageFetch = ({
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-    deleteFile?.(e, file);
+    deleteFile?.(e, file!);
   };
 
   return (

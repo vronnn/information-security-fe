@@ -8,6 +8,7 @@ import Button from '@/components/buttons/Button';
 import ButtonLink from '@/components/links/ButtonLink';
 import Typography from '@/components/typography/Typography';
 import api from '@/lib/axios';
+import clsxm from '@/lib/clsxm';
 import { buildGetFileUrl } from '@/lib/file';
 import { FileWithPreview } from '@/types/dropzone';
 
@@ -17,7 +18,7 @@ type FileFetchProps = {
   width?: number;
   height?: number;
   fileClassName?: string;
-  file: FileWithPreview;
+  file?: FileWithPreview;
   file_name: string;
   deleteFile?: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -34,6 +35,8 @@ const FileFetch = ({
   deleteFile,
   file,
   mode,
+  className,
+  fileClassName,
   ...props
 }: FileFetchProps) => {
   const [fileSrc, setFileSrc] = React.useState<string>();
@@ -62,7 +65,7 @@ const FileFetch = ({
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-    deleteFile?.(e, file);
+    deleteFile?.(e, file!);
   };
 
   return (
@@ -70,7 +73,10 @@ const FileFetch = ({
       <div {...props} className='cursor-pointer'>
         {fileSrc && (
           <div
-            className='flex flex-col md:flex-row justify-center gap-2 min-w-full w-fit py-4 rounded-lg'
+            className={clsxm(
+              'flex flex-col md:flex-row justify-center gap-2 min-w-full w-fit py-4 rounded-lg',
+              className,
+            )}
             style={{
               width: '100%',
               height: 'auto',
@@ -94,12 +100,12 @@ const FileFetch = ({
                 pageNumber={1}
                 renderTextLayer={false}
                 renderAnnotationLayer={false}
-                className='border'
+                className={clsxm('border w-fit', fileClassName)}
               />
             </Document>
 
             {withOption && (
-              <div className='flex justify-between md:flex-col h-full gap-2'>
+              <div className='flex justify-between md:flex-col h-full gap-2 mt-2'>
                 <div className='flex items-center gap-2 md:hidden'>
                   <CgFileDocument className='text-lg' />
                   <Typography variant='d' className='text-base-tertiary'>

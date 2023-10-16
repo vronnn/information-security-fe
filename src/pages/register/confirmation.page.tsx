@@ -36,7 +36,7 @@ function ConfirmationPage() {
   >(useMutation((data) => api.put('/api/user', data)));
   const onSubmit = (data: positionForm) => {
     patchWork(data)
-      .then(() => router.push('/'))
+      .then(() => router.push('/dashboard'))
       .catch(() => {});
   };
 

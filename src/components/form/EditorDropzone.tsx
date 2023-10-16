@@ -16,6 +16,10 @@ import clsxm from '@/lib/clsxm';
 import { buildPostFileUrl } from '@/lib/file';
 import { ApiError, ApiReturn } from '@/types/api';
 import { FileWithPreview } from '@/types/dropzone';
+import {
+  onDropFileRequirement,
+  onDropFileResponse,
+} from '@/types/entities/file';
 
 const FileDisplay = dynamic(() => import('@/components/form/FileDisplay'), {
   ssr: false,
@@ -33,26 +37,6 @@ type EditorDropzoneInputProps = {
   className?: string;
   defaultTab?: string;
   rows?: number;
-};
-
-type onDropFileResponse = {
-  path: string;
-  file_name: string;
-  file_type: 'video' | 'image' | 'file';
-  encryption: string;
-  aws_key: string;
-  aes_plain_text: string;
-  aes_block_cipher: string;
-  aes_ciphertext?: string;
-  aes_gcm?: string;
-  aes_nonce?: string;
-  aes_result: string;
-  elapsed_time: string;
-};
-
-type onDropFileRequirement = {
-  file: File;
-  file_type: 'video' | 'image' | 'file';
 };
 
 export default function EditorDropzone({
@@ -131,7 +115,7 @@ export default function EditorDropzone({
       });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [url, encryptFile],
+    [],
   );
 
   const fileValue = getValues(id);
@@ -177,7 +161,8 @@ export default function EditorDropzone({
           : 'file',
       });
     }
-  }, [mode, url, encrypt, file]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [url, file]);
 
   React.useEffect(() => {
     return () => {
@@ -258,7 +243,7 @@ export default function EditorDropzone({
             helperText && 'pb-0',
           )}
         >
-          <div className='py-1 px-0.5 flex items-center justify-between'>
+          <div className='py-1.5 px-0.5 flex items-center justify-between'>
             {withLabel && (
               <Typography
                 as='label'
@@ -328,7 +313,12 @@ export default function EditorDropzone({
                       />
                     </div>
                   </div>
-                  <div className='flex items-center gap-1 py-1.5 px-0.5'>
+                  <div
+                    className={clsxm(
+                      'flex items-center gap-1 py-2 px-0.5',
+                      error && 'py-1.5',
+                    )}
+                  >
                     {encryptFileIsLoading && (
                       <CgSpinner className='animate-spin' />
                     )}
@@ -344,6 +334,10 @@ export default function EditorDropzone({
                         >
                           {encryptFileIsLoading
                             ? 'Wait for file encryption...'
+                            : encryptedData
+                            ? helperText +
+                              ' - ' +
+                              encryptedData?.data.data.file_name
                             : helperText}
                         </Typography>
                       )

@@ -14,7 +14,7 @@ type VideoFetchProps = {
   height?: number;
   vidClassName?: string;
   fileClassName?: string;
-  file: FileWithPreview;
+  file?: FileWithPreview;
   file_name: string;
   deleteFile?: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -60,7 +60,7 @@ const VideoFetch = ({
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-    deleteFile?.(e, file);
+    deleteFile?.(e, file!);
   };
 
   return (
@@ -76,8 +76,7 @@ const VideoFetch = ({
             <video
               src={vidSrc as string}
               controls
-              style={{ maxWidth: '100%', maxHeight: '266px' }}
-              className={vidClassName}
+              className={clsxm('max-w-full max-h-[266px]', vidClassName)}
             />
             {withOption && (
               <div className='flex flex-col h-full gap-2'>

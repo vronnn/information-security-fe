@@ -7,13 +7,15 @@ import * as React from 'react';
 import { HiOutlineMenuAlt2 } from 'react-icons/hi';
 
 import Typography from '@/components/typography/Typography';
+import useAuthStore from '@/store/useAuthStore';
 
 type HeaderProps = {
   setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function Header({ setSidebarOpen }: HeaderProps) {
-  const userNavigation = [{ name: 'Sign out', handleClick: () => {} }];
+  const logout = useAuthStore((state) => state.logout);
+  const userNavigation = [{ name: 'Sign out', handleClick: logout }];
 
   return (
     <div className='sticky top-0 z-10 bg-white shadow'>

@@ -3,10 +3,9 @@ import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { IconType } from 'react-icons';
-import { FaStethoscope } from 'react-icons/fa';
-import { FiChevronDown } from 'react-icons/fi';
-import { RiServiceLine } from 'react-icons/ri';
-import { TbCreditCard } from 'react-icons/tb';
+import { AiOutlineUser } from 'react-icons/ai';
+import { FiBriefcase, FiChevronDown } from 'react-icons/fi';
+import { TiDocument } from 'react-icons/ti';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
 import clsxm from '@/lib/clsxm';
@@ -32,21 +31,21 @@ const navigations: Navigations = [
     {
       name: 'Profile',
       href: '/dashboard/profile',
-      icon: FaStethoscope,
+      icon: AiOutlineUser,
     },
   ],
   [
     {
       name: 'Document',
       href: '/dashboard',
-      icon: TbCreditCard,
+      icon: TiDocument,
     },
   ],
   [
     {
       name: 'Workspace',
       href: '/dashboard/workspace',
-      icon: RiServiceLine,
+      icon: FiBriefcase,
     },
   ],
 ];
