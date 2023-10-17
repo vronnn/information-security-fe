@@ -3,6 +3,7 @@ import { CgFileDocument, CgSpinner } from 'react-icons/cg';
 import { FiTrash } from 'react-icons/fi';
 import { HiOutlineExternalLink } from 'react-icons/hi';
 import { Document, Page } from 'react-pdf';
+import { pdfjs } from 'react-pdf';
 
 import Button from '@/components/buttons/Button';
 import ButtonLink from '@/components/links/ButtonLink';
@@ -11,6 +12,11 @@ import api from '@/lib/axios';
 import clsxm from '@/lib/clsxm';
 import { buildGetFileUrl } from '@/lib/file';
 import { FileWithPreview } from '@/types/dropzone';
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.js',
+  import.meta.url,
+).toString();
 
 type FileFetchProps = {
   filePath: string;

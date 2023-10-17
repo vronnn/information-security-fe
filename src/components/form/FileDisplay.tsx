@@ -1,18 +1,12 @@
 import 'react-image-lightbox-rotation/style.css';
 
 import * as React from 'react';
-import { pdfjs } from 'react-pdf';
 
 import FileFetch from '@/components/fetch/FileFetch';
 import ImageFetch from '@/components/fetch/ImageFetch';
 import VideoFetch from '@/components/fetch/VideoFetch';
 import clsxm from '@/lib/clsxm';
 import { FileWithPreview } from '@/types/dropzone';
-
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  'pdfjs-dist/build/pdf.worker.min.js',
-  import.meta.url,
-).toString();
 
 type FileDisplayProps = {
   file?: FileWithPreview;

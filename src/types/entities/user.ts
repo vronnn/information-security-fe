@@ -1,3 +1,5 @@
+import { fileProps } from '@/types/entities/file';
+
 export type User = {
   id: string;
   name: string;
@@ -16,3 +18,7 @@ export type MeRespond = {
   telp_number: string;
   is_verified: boolean;
 };
+
+export type DetailUser = {
+  files: fileProps[];
+} & MeRespond;

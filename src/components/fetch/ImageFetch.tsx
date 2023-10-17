@@ -87,14 +87,9 @@ const ImageFetch = ({
 
   return (
     <>
-      <div {...props} className='relative'>
+      <div {...props} className={clsxm('relative', className)}>
         {imgSrc ? (
-          <div
-            className={clsxm(
-              'flex justify-center py-4 rounded-lg max-h-[16.65rem]',
-              className,
-            )}
-          >
+          <div className='flex justify-center py-4 rounded-lg max-h-[16.65rem]'>
             <img
               src={imgSrc as string}
               alt={alt}
@@ -116,31 +111,31 @@ const ImageFetch = ({
             onCloseRequest={() => setIsOpen(false)}
           />
         )}
+        {withLabel && (
+          <div className='flex min-h-[2.25rem] border rounded-lg items-center justify-between py-0 px-3 text-mid text-base-tertiary md:min-h-[2.5rem] z-50'>
+            <div className='flex items-center gap-2'>
+              <TbPhoto className='text-lg' />
+              <Typography variant='d'>{file_name}</Typography>
+            </div>
+            <div className='flex items-center gap-1'>
+              <Button
+                icon={HiOutlineViewfinderCircle}
+                variant='ghost'
+                size='icon'
+                className='text-lg text-gray-600 hover:bg-gray-100 focus:ring-0 rounded-md'
+                onClick={() => setIsOpen(true)}
+              />
+              <Button
+                icon={FiTrash}
+                variant='ghost'
+                size='icon'
+                className='text-red-500 hover:bg-red-100 rounded-md focus:ring-0'
+                onClick={handleDelete}
+              />
+            </div>
+          </div>
+        )}
       </div>
-      {withLabel && (
-        <div className='flex min-h-[2.25rem] border rounded-lg items-center justify-between py-0 px-3 text-mid text-base-tertiary md:min-h-[2.5rem] z-50'>
-          <div className='flex items-center gap-2'>
-            <TbPhoto className='text-lg' />
-            <Typography variant='d'>{file_name}</Typography>
-          </div>
-          <div className='flex items-center gap-1'>
-            <Button
-              icon={HiOutlineViewfinderCircle}
-              variant='ghost'
-              size='icon'
-              className='text-lg text-gray-600 hover:bg-gray-100 focus:ring-0 rounded-md'
-              onClick={() => setIsOpen(true)}
-            />
-            <Button
-              icon={FiTrash}
-              variant='ghost'
-              size='icon'
-              className='text-red-500 hover:bg-red-100 rounded-md focus:ring-0'
-              onClick={handleDelete}
-            />
-          </div>
-        </div>
-      )}
     </>
   );
 };
