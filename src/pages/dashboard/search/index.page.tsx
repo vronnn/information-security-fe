@@ -235,6 +235,7 @@ function SearchPage() {
                                     variant='outline'
                                     icon={HiOutlineEye}
                                     onClick={openModal}
+                                    disabled={status === 'pending'}
                                   />
                                 )}
                               </KeyModal>
