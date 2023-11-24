@@ -74,7 +74,7 @@ export default function Typography<T extends React.ElementType = 'p'>({
           variant === 'c2' && ['text-[11px] md:text-xs leading-[14px]'],
           // modal and dialog variant for poppins font
           variant === 't' && ['text-macro md:text-macro font-semibold'],
-          variant === 'd' && ['text-mid md:text-mid font-normal'],
+          variant === 'd' && ['!text-mid md:text-mid font-normal'],
         ],
         className,
       )}

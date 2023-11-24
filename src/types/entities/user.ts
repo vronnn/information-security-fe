@@ -8,6 +8,9 @@ export type User = {
   telp_number: string;
   is_verified: boolean;
   token: string;
+  public_key: string;
+  private_key: string;
+  symmetric_key: string;
 };
 
 export type MeRespond = {
@@ -17,6 +20,17 @@ export type MeRespond = {
   role: string;
   telp_number: string;
   is_verified: boolean;
+  public_key: string;
+  private_key: string;
+  symmetric_key: string;
+};
+
+export type UserDisplayedProps = {
+  id: string;
+  user_id: string;
+  name: string;
+  email: string;
+  status: 'pending' | 'approved' | 'rejected';
 };
 
 export type DetailUser = {

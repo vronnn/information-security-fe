@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { IconType } from 'react-icons';
 import { AiOutlineUser, AiOutlineUsergroupAdd } from 'react-icons/ai';
-import { FiBriefcase, FiChevronDown } from 'react-icons/fi';
+import { FiChevronDown, FiSearch } from 'react-icons/fi';
 import { MdOutlineTipsAndUpdates } from 'react-icons/md';
 import { TiDocument } from 'react-icons/ti';
 
@@ -41,9 +41,9 @@ const navigations: Navigations = [
       icon: TiDocument,
     },
     {
-      name: 'Workspace',
-      href: '/dashboard/workspace',
-      icon: FiBriefcase,
+      name: 'Search',
+      href: '/dashboard/search',
+      icon: FiSearch,
     },
   ],
   [
@@ -170,14 +170,11 @@ function NavigationLink({
   className?: string;
 }) {
   const router = useRouter();
-  let currentRoute: string = router.pathname;
-  if (currentRoute.startsWith('/[medic]')) {
-    currentRoute = '/' + router.query.medic?.toString() || '';
-  }
+  const currentRoute: string = router.pathname;
 
   const isActive = navigation.exactMatch
     ? currentRoute === navigation.href
-    : currentRoute.startsWith(navigation.href);
+    : currentRoute === navigation.href;
 
   return (
     <UnstyledLink
