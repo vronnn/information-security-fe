@@ -38,19 +38,19 @@ function DetailUserPage() {
             <Typography variant='s3' className='text-base-icon'>
               Nama
             </Typography>
-            <Typography variant='b1'>{detailUserData?.data.name}</Typography>
+            <Typography variant='s1'>{detailUserData?.data.name}</Typography>
           </div>
           <div className='py-2 space-y-1'>
             <Typography variant='s3' className='text-base-icon'>
               Email
             </Typography>
-            <Typography variant='b1'>{detailUserData?.data.email}</Typography>
+            <Typography variant='s1'>{detailUserData?.data.email}</Typography>
           </div>
           <div className='py-2 space-y-1'>
             <Typography variant='s3' className='text-base-icon'>
               Phone Number
             </Typography>
-            <Typography variant='b1'>
+            <Typography variant='s1'>
               {detailUserData?.data.telp_number}
             </Typography>
           </div>
@@ -58,7 +58,7 @@ function DetailUserPage() {
             <Typography variant='s3' className='text-base-icon'>
               Role
             </Typography>
-            <Typography variant='b1'>{detailUserData?.data.role}</Typography>
+            <Typography variant='s1'>{detailUserData?.data.role}</Typography>
           </div>
         </div>
         <div className='grid lg:grid-cols-2 gap-6'>

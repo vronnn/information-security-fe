@@ -21,7 +21,7 @@ const FileDisplay = dynamic(() => import('@/components/form/FileDisplay'), {
 
 export default WithAuth(DashboardPage, ['user']);
 function DashboardPage() {
-  const url = '/api/file';
+  const url = '/api/file/last';
   const { data: userFiles } = useQuery<ApiReturn<fileProps[]>, Error>([url]);
   return (
     <DashboardLayout>

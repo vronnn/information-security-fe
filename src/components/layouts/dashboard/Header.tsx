@@ -45,7 +45,7 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
               {/* Profile dropdown */}
               <Menu as='div' className='relative ml-3'>
                 <div className='pr-2 sm:pr-0'>
-                  <Menu.Button className='-mr-2 flex max-w-xs items-center gap-2 rounded-full bg-white sm:px-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'>
+                  <Menu.Button className='-mr-2 flex max-w-[10rem] items-center gap-2 rounded-full bg-white sm:px-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'>
                     <span className='sr-only'>Open user menu</span>
                     <Image
                       className='h-8 w-8 flex-shrink-0 overflow-hidden rounded-full'
@@ -54,8 +54,10 @@ export default function Header({ setSidebarOpen }: HeaderProps) {
                       height={256}
                       alt='avatar'
                     />
-                    <div className='hidden min-w-0 flex-1 flex-col items-start sm:flex text-base-dark'>
-                      <Typography variant='b4'>{user?.name}</Typography>
+                    <div className='hidden min-w-0 flex-1 flex-col items-start sm:flex text-base-dark max-w-full'>
+                      <Typography variant='b4' className='truncate w-full'>
+                        {user?.name}
+                      </Typography>
                       <Typography variant='s4' className='text-base-secondary'>
                         {user?.role}
                       </Typography>

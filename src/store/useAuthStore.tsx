@@ -47,7 +47,7 @@ const useAuthStoreBase = create<AuthStoreType>((set) => ({
     );
   },
   refetch: async () => {
-    const res = await api.get<ApiReturn<MeRespond>>('/auth/me');
+    const res = await api.get<ApiReturn<MeRespond>>('/api/user/me');
     const data = res.data.data;
 
     set(

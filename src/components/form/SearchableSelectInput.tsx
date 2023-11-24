@@ -24,6 +24,7 @@ export type SearchableSelectInputProps = {
   hideError?: boolean;
   options: { value: string; label: string }[];
   containerClassName?: string;
+  menuHeight?: string;
 } & React.ComponentPropsWithoutRef<'select'> &
   ExtractProps<Select>;
 
@@ -39,6 +40,7 @@ export default function SearchableSelectInput({
   disabled,
   options,
   containerClassName,
+  menuHeight,
   ...rest
 }: SearchableSelectInputProps) {
   const {
@@ -90,6 +92,10 @@ export default function SearchableSelectInput({
         maxHeight: '4.875rem',
       },
       overflowY: 'auto',
+    }),
+    menuList: (styles) => ({
+      ...styles,
+      maxHeight: menuHeight ? menuHeight : '16rem',
     }),
     input: (styles) => ({
       ...styles,
@@ -150,11 +156,11 @@ export default function SearchableSelectInput({
           ? 'var(--color-primary-500)'
           : 'var(--color-primary-100)',
       },
-      fontSize: '15px',
-      lineHeight: '22px',
+      fontSize: '14px',
+      lineHeight: '20px',
       '@media (min-width: 768px)': {
-        fontSize: '16px',
-        lineHeight: '24px',
+        fontSize: '15px',
+        lineHeight: '22px',
       },
     }),
     multiValue: (styles, state) => ({
@@ -204,7 +210,7 @@ export default function SearchableSelectInput({
         <Typography
           as='label'
           variant='s3'
-          className='text-base-black div'
+          className='text-base-black'
           htmlFor={id}
         >
           {label}
