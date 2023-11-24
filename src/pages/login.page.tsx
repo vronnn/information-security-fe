@@ -96,7 +96,7 @@ export default function LoginPage() {
           <p className='text-black/70 text-[13px] leading-4'>
             No account?{' '}
             <Link
-              href='/signup'
+              href='/register'
               className='text-black underline decoration-white hover:decoration-stone-600 transition duration-150'
             >
               Sign up
