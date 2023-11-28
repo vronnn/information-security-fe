@@ -9,7 +9,7 @@ export default function Seo({ title, description, ...rest }: SeoProps) {
   return (
     <NextSeo
       title={title}
-      titleTemplate='%s | Next.Js Template'
+      titleTemplate='%s | Information Security'
       description={
         description ??
         'Next.Js starter template with default design system, components, seo, prettier, eslint, husky, etc.'
@@ -18,9 +18,9 @@ export default function Seo({ title, description, ...rest }: SeoProps) {
       openGraph={{
         type: 'website',
         url: process.env.NEXT_PUBLIC_URL,
-        title: 'Next.Js Template',
+        title: 'Information Security',
         locale: 'in_ID',
-        siteName: 'Next.Js Template',
+        siteName: 'Information Security',
         description:
           'Next.Js starter template with default design system, components, seo, prettier, eslint, husky, etc.',
         images: [
@@ -28,7 +28,7 @@ export default function Seo({ title, description, ...rest }: SeoProps) {
             url: `https://raw.githubusercontent.com/vronnn/nextjs-project-setup/main/public/next.svg`,
             width: 1200,
             height: 802,
-            alt: 'Next.Js Template',
+            alt: 'Information Security',
           },
         ],
       }}
@@ -43,7 +43,7 @@ export default function Seo({ title, description, ...rest }: SeoProps) {
           href: '/favicon.ico',
         },
       ]}
-      defaultTitle='Next.Js Template'
+      defaultTitle='Information Security'
     />
   );
 }
