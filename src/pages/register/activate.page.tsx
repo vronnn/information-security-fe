@@ -30,13 +30,40 @@ type activationAccResponse = {
 
 export default function ActivatePage() {
   const router = useRouter();
+  const { token } = router.query;
   const login = useAuthStore.useLogin();
-  const methods = useForm<activationAccForm>();
+  const methods = useForm<activationAccForm>({
+    defaultValues: {
+      token: token?.toString(),
+    },
+  });
   const { handleSubmit } = methods;
   const { mutateAsync: activate, isLoading: activateIsLoading } =
     useMutationToast<activationAccResponse, activationAccForm>(
       useMutation((data) => api.post('/api/user/verify-email', data)),
     );
+
+  const verif = React.useCallback(() => {
+    if (token) {
+      activate({ token: token.toString() }).then((res) => {
+        const { token } = res.data.data;
+        setToken(token);
+        api.get<ApiReturn<MeRespond>>('/api/user/me').then((res) => {
+          login({
+            ...res.data.data,
+            token: token,
+          });
+          router.replace('/register/documents');
+        });
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
+
+  React.useEffect(() => {
+    verif();
+  }, [verif]);
+
   const onSubmit = async (data: activationAccForm) => {
     activate(data).then((res) => {
       const { token } = res.data.data;
@@ -123,7 +150,7 @@ export default function ActivatePage() {
                     id='token'
                     label={null}
                     placeholder='Enter your token here ...'
-                    validation={{ required: 'Token must be filled' }}
+                    defaultValue={token}
                   />
                 </div>
               </div>
