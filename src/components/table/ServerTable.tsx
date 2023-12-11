@@ -44,8 +44,8 @@ type SetServerTableState = {
 };
 
 type ServerTableProps<T extends object> = {
-  columns: ColumnDef<EnsureIdProperty<T>>[];
-  data: EnsureIdProperty<T>[];
+  columns: ColumnDef<T>[];
+  data: T[];
   header?: React.ReactNode;
   tableState: ServerTableState;
   setTableState: SetServerTableState;
@@ -97,7 +97,7 @@ export default function ServerTable<T extends object>({
     manualPagination: true,
     manualSorting: true,
     autoResetAll: false,
-    getRowId: (row) => row.id,
+    // getRowId: (row) => row.id,
   });
 
   return (

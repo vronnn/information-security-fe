@@ -1,3 +1,4 @@
+import { LucideIcon } from 'lucide-react';
 import * as React from 'react';
 import { IconType } from 'react-icons';
 import { CgSpinner } from 'react-icons/cg';
@@ -24,8 +25,8 @@ export type ButtonProps = {
   size?: keyof typeof ButtonSize;
   variant?: keyof typeof ButtonVariant;
   isLoading?: boolean;
-  icon?: IconType;
-  leftIcon?: IconType;
+  icon?: IconType | LucideIcon;
+  leftIcon?: IconType | LucideIcon;
   rightIcon?: IconType;
   iconClassName?: string;
   leftIconClassName?: string;

@@ -5,7 +5,10 @@ import * as React from 'react';
 import { IconType } from 'react-icons';
 import { AiOutlineUser, AiOutlineUsergroupAdd } from 'react-icons/ai';
 import { FiChevronDown, FiSearch } from 'react-icons/fi';
-import { MdOutlineTipsAndUpdates } from 'react-icons/md';
+import {
+  MdOutlineForwardToInbox,
+  MdOutlineTipsAndUpdates,
+} from 'react-icons/md';
 import { TiDocument } from 'react-icons/ti';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
@@ -44,6 +47,11 @@ const navigations: Navigations = [
       name: 'Search',
       href: '/dashboard/search',
       icon: FiSearch,
+    },
+    {
+      name: 'Inbox',
+      href: '/dashboard/inbox',
+      icon: MdOutlineForwardToInbox,
     },
   ],
   [

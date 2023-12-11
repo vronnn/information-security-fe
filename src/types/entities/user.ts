@@ -36,3 +36,9 @@ export type UserDisplayedProps = {
 export type DetailUser = {
   files: fileProps[];
 } & MeRespond;
+
+export type UserProps = {
+  user_id: string;
+  name: string;
+  email: string;
+};

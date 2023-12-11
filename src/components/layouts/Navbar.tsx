@@ -11,6 +11,7 @@ import UnstyledLink from '@/components/links/UnstyledLink';
 import Typography from '@/components/typography/Typography';
 import { NavbarItem } from '@/constant/layout';
 import clsxm from '@/lib/clsxm';
+import useAuthStore from '@/store/useAuthStore';
 
 type NavbarProps = {
   isSidebarOpen: boolean;
@@ -24,6 +25,7 @@ export default function Navbar({
   closeSidebar,
 }: NavbarProps) {
   const router = useRouter();
+  const user = useAuthStore.useUser();
 
   //#region  //*=========== Navbar Scroll Effect ===========
   const [isScrolled, setIsScrolled] = React.useState(false);
@@ -74,7 +76,11 @@ export default function Navbar({
               </Typography>
             </UnstyledLink>
           ))}
-          <ButtonLink href='/login'>Log in</ButtonLink>
+          {user ? (
+            <Typography>{user.name}</Typography>
+          ) : (
+            <ButtonLink href='/login'>Log in</ButtonLink>
+          )}
         </nav>
       </div>
       {/* mobile navbar */}

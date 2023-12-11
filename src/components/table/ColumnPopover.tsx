@@ -7,11 +7,10 @@ import { MdOutlineViewAgenda } from 'react-icons/md';
 
 import Button from '@/components/buttons/Button';
 import Checkbox from '@/components/form/Checkbox';
-import { EnsureIdProperty } from '@/components/table/ServerTable';
 import clsxm from '@/lib/clsxm';
 
 type ColumnPopoverProps<T extends object> = {
-  table: Table<EnsureIdProperty<T>>;
+  table: Table<T>;
 };
 
 export default function ColumnPopover<T extends object>({

@@ -19,7 +19,7 @@ import api from '@/lib/axios';
 import clsxm from '@/lib/clsxm';
 import KeyModal from '@/pages/dashboard/search/KeyModal';
 import { ApiReturn } from '@/types/api';
-import { UserDisplayedProps } from '@/types/entities/user';
+import { UserDisplayedProps, UserProps } from '@/types/entities/user';
 
 type publicForm = {
   public_share_key: string;
@@ -27,11 +27,6 @@ type publicForm = {
 
 type requestUserForm = {
   user_owner_id: string;
-};
-
-type UserProps = {
-  user_id: string;
-  name: string;
 };
 
 export default WithAuth(SearchPage, ['user']);
